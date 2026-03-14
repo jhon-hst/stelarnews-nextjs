@@ -1,6 +1,6 @@
-import type { ArticleDetail } from "./types";
+import { ArticleDetailType } from "./types";
 
-export const ARTICLE_DETAIL: ArticleDetail = {
+export const ARTICLE_DETAIL: ArticleDetailType = {
   id: 1,
   slug: "15-lugares-mas-hermosos",
   title: "Los 15 lugares más hermosos que debes visitar al menos una vez",
@@ -115,4 +115,3 @@ export const ARTICLE_DETAIL: ArticleDetail = {
     },
   ],
 };
-
