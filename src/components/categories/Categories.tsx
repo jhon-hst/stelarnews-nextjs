@@ -17,7 +17,7 @@ interface CategoriesProps {
 
 export function Categories({ active }: CategoriesProps) {
     return (
-        <nav className="border-b border-white/5 bg-gradient-to-r from-slate-900/80 via-slate-900/40 to-slate-900/80">
+        <nav className="border-b border-slate-200 bg-white">
             <div className="mx-auto flex max-w-6xl gap-3 overflow-x-auto px-4 py-3 text-sm sm:px-6 lg:px-8">
                 {CATEGORIES.map((category) => {
                     const isActive = active === category || (!active && category === "Toda la actualidad");
@@ -25,9 +25,9 @@ export function Categories({ active }: CategoriesProps) {
                         <button
                             key={category}
                             type="button"
-                            className={`whitespace-nowrap rounded-full px-4 py-1.5 transition-colors ${isActive
-                                    ? "bg-sky-500 text-white shadow-sm shadow-sky-500/40"
-                                    : "bg-white/0 text-slate-200 hover:bg-white/5"
+                            className={`whitespace-nowrap rounded-full px-4 py-1.5 text-sm transition-colors ${isActive
+                                    ? "bg-[#000000] text-white shadow-sm shadow-black/30"
+                                    : "bg-white text-slate-700 hover:bg-slate-50"
                                 }`}
                         >
                             {category}
