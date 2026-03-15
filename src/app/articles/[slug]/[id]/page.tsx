@@ -32,18 +32,18 @@ export async function generateMetadata(
   const title = article?.title ?? "Artículo";
   const description =
     article?.description ??
-    "Lee este artículo en StelarNews, tu portal de noticias curadas.";
+    "Lee este artículo en Estelarnews, tu portal de noticias curadas.";
   const image = article?.image ?? "/window.svg";
 
   const urlSlug = props.params.slug || "15-lugares-mas-hermosos";
   const urlId = props.params.id || "1";
-  const url = `https://estelarnews.com/articles/${urlSlug}/${urlId}`;
+  const url = `https://eEstelarnews.com/articles/${urlSlug}/${urlId}`;
 
   return {
-    title: `${title} | StelarNews`,
+    title: `${title} | Estelarnews`,
     description,
     openGraph: {
-      title: `${title} | StelarNews`,
+      title: `${title} | Estelarnews`,
       description,
       url,
       type: "article",
@@ -53,12 +53,12 @@ export async function generateMetadata(
           alt: title,
         },
       ],
-      siteName: "StelarNews",
+      siteName: "Estelarnews",
       locale: "es_ES",
     },
     twitter: {
       card: "summary_large_image",
-      title: `${title} | StelarNews`,
+      title: `${title} | Estelarnews`,
       description,
       images: [image],
     },

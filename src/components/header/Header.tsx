@@ -1,4 +1,4 @@
-import { Search } from "lucide-react";
+// import { Search } from "lucide-react";
 import Image from "next/image";
 
 export function Header() {
@@ -9,7 +9,7 @@ export function Header() {
                     <div className="relative h-9 w-9 overflow-hidden rounded-xl bg-gradient-to-br from-sky-500 via-cyan-400 to-indigo-500 shadow-lg shadow-sky-500/40">
                         <Image
                             src="/globe.svg"
-                            alt="StelarNews logo"
+                            alt="Estelarnews logo"
                             fill
                             sizes="36px"
                             className="object-cover opacity-70"
@@ -17,7 +17,7 @@ export function Header() {
                     </div>
                     <div className="leading-tight">
                         <p className="font-display text-lg font-semibold tracking-tight text-slate-900">
-                            StelarNews
+                            Estelarnews
                         </p>
                         <p className="text-xs text-slate-500">
                             Noticias al instante, en un solo lugar

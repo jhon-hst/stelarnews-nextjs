@@ -24,8 +24,6 @@ export default async function Home() {
     console.error("Error fetching articles", error);
   }
 
-  console.log(articlesData);
-
   const typedData = (articlesData ?? []) as ArticleWithCategory[];
 
   const articles: ArticleType[] = typedData.map((item) => ({
