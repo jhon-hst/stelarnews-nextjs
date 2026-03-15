@@ -1,44 +1,34 @@
-import { Header } from "@/components/header/Header";
-import { Categories } from "@/components/categories/Categories";
-import { Footer } from "@/components/footer/Footer";
 import { ItemArticle } from "@/components/article/Article";
 import { ArticleType } from "@/utils/types";
+import { createServerSupabaseClient } from "@/lib/supabase-server";
+import { Tables } from "@/types/database.types";
 
-const MOCK_ARTICLES: ArticleType[] = [
-  {
-    id: 1,
-    title:
-      "Título de ejemplo para una noticia destacada que se completará más adelante",
-    category: "Política",
-    categoryId: 1,
-    image: "/window.svg",
-  },
-  {
-    id: 2,
-    title:
-      "Otra noticia importante con un titular de relleno para completar posteriormente",
-    category: "Economía",
-    categoryId: 2,
-    image: "/vercel.svg",
-  },
-  {
-    id: 3,
-    title:
-      "Cobertura especial sobre un evento relevante. El contenido se definirá después",
-    category: "Tecnología",
-    categoryId: 3,
-    image: "/file.svg",
-  },
-  {
-    id: 4,
-    title: "Artículo de análisis y opinión con texto provisional",
-    category: "Opinión",
-    categoryId: 4,
-      image: "/next.svg",
-  },
-];
+type ArticleWithCategory = Tables<"articles"> & {
+  categories: Tables<"categories"> | null;
+};
 
-export default function Home() {
+export default async function Home() {
+  const supabase = await createServerSupabaseClient();
+
+  const { data, error } = await supabase
+    .from("articles")
+    .select("*, categories(*)")
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    console.error("Error fetching articles", error);
+  }
+
+  const typedData = (data ?? []) as ArticleWithCategory[];
+
+  const articles: ArticleType[] = typedData.map((item) => ({
+    id: item.id,
+    title: item.title ?? "",
+    image: item.image ?? "/window.svg",
+    categoryId: item.category_id ?? 0,
+    category: item.categories?.name ?? "Sin categoría",
+  }));
+
   return (
 
 
@@ -59,7 +49,7 @@ export default function Home() {
         </section>
 
         <section className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-          {MOCK_ARTICLES.map((article) => (
+          {articles.map((article) => (
             <ItemArticle key={article.id} article={article} />
           ))}
         </section>

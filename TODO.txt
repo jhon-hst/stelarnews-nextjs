@@ -1,7 +1,33 @@
-header
-item
-footer
-terminos y condiciones
-politicas de privacidad
-acerca de 
-pagina de articulo
+
+inicializar supabase
+    articles
+    categories
+
+
+    
+Conectar supabase
+    home -> Cada 12 horas se actualiza la cache
+    categories -> Cada 12 horas se actualiza la cache
+    Article -> La cache se renueva manualmente
+Pulir estilos
+Cambiar textos que este por ahí 
+ocultar buscador
+agregar contenido politicas de privacidad
+agregar contenido terminos y condiciones
+agregar contenido Sobre nosotros
+Agregar logo
+Agregar favicon
+agregar articulos
+Enviar para hacer search arbitrage 
+Agregar la publicidad en los articulos
+hacer publicidad
+notificar en google search
+usar las herramientas de analytics de facebook
+usar las herramientas de analytics de tiktok
+
+
+
+WISHES:
+idiomas
+mejora de estilos
+pensar si agregar el buscador
