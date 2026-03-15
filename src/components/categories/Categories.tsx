@@ -26,7 +26,7 @@ export function Categories({ categories, activeCategoryId }: CategoriesProps) {
               : "bg-white text-slate-700 hover:bg-slate-50"
           }`}
         >
-          Toda la actualidad
+          All news
         </Link>
 
         {categories.map((category) => {

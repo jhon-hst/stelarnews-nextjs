@@ -3,13 +3,6 @@ inicializar supabase
     articles
     categories
 ocultar buscador
-
-
-
-Conectar supabase
-    home -> Cada 12 horas se actualiza la cache
-    categories -> Cada 12 horas se actualiza la cache
-    Article -> La cache se renueva manualmente
 Pulir estilos
 Cambiar textos que este por ahí 
 agregar contenido politicas de privacidad
@@ -17,7 +10,24 @@ agregar contenido terminos y condiciones
 agregar contenido Sobre nosotros
 Agregar logo
 Agregar favicon
+
+
+
+revisar el SEO de cada pagina incluido sobre nosotros, politicas y terminos
+    titulo 
+    descripcion
+    image
+    html tags
 agregar articulos
+    crear images 
+    subir images a cloudflare
+Conectar supabase
+    home -> Cada 12 horas se actualiza la cache
+    categories -> Cada 12 horas se actualiza la cache
+    Article -> La cache se renueva manualmente
+
+
+
 Enviar para hacer search arbitrage 
 Agregar la publicidad en los articulos
 hacer publicidad

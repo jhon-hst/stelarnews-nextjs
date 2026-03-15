@@ -17,7 +17,7 @@ const montserrat = Montserrat({
 });
 
 export const metadata: Metadata = {
-  title: "Estelarnews",
+  title: "EstelarNews",
   description: "Portal de noticias rápido y moderno.",
 };
 

@@ -43,16 +43,13 @@ export default async function Home() {
       <main className="mx-auto flex w-full max-w-6xl flex-1 flex-col gap-8 px-4 py-6 sm:px-6 lg:px-8">
         <section className="flex flex-col gap-3">
           <p className="text-xs uppercase tracking-[0.25em] text-[#1a1a1a]">
-            Hoy en portada
+            All news
           </p>
           <h1 className="font-display text-2xl font-semibold tracking-tight sm:text-3xl">
-            Noticias curadas para mantenerte siempre informado.
+            News Refined for the Modern Reader
           </h1>
           <p className="max-w-2xl text-sm text-slate-600">
-            Este es un texto de ejemplo que describe brevemente el objetivo de
-            tu portal de noticias. Más adelante podrás reemplazarlo por un
-            resumen real de la línea editorial, el tipo de contenido y el valor
-            que ofreces a tus lectores.
+            The most important stories, analyzed and simplified. Experience high-quality journalism designed for a fast-paced world. Welcome to the future of digital news.
           </p>
         </section>
 

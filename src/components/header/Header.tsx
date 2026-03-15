@@ -1,29 +1,32 @@
 // import { Search } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 
 export function Header() {
     return (
         <header className="border-b border-slate-200 bg-white/95 backdrop-blur-xl">
             <div className="mx-auto flex max-w-6xl items-center gap-6 px-4 py-4 sm:px-6 lg:px-8">
-                <div className="flex items-center gap-2">
-                    <div className="relative h-9 w-9 overflow-hidden rounded-xl bg-gradient-to-br from-sky-500 via-cyan-400 to-indigo-500 shadow-lg shadow-sky-500/40">
-                        <Image
-                            src="/globe.svg"
-                            alt="Estelarnews logo"
-                            fill
-                            sizes="36px"
-                            className="object-cover opacity-70"
-                        />
+                <Link href={"/"}>
+                    <div className="flex items-center gap-2">
+                        <div className="relative h-9 w-9 overflow-hidden rounded-sm ">
+                            <Image
+                                src="/icon.webp"
+                                alt="EstelarNews logo"
+                                fill
+                                sizes="36px"
+                                className="object-cover"
+                            />
+                        </div>
+                        <div className="leading-tight">
+                            <p className="font-display text-lg font-semibold tracking-tight text-slate-900">
+                                EstelarNews
+                            </p>
+                            <p className="text-xs text-slate-500">
+                                Stay Informed. Stay Estelar.
+                            </p>
+                        </div>
                     </div>
-                    <div className="leading-tight">
-                        <p className="font-display text-lg font-semibold tracking-tight text-slate-900">
-                            Estelarnews
-                        </p>
-                        <p className="text-xs text-slate-500">
-                            Noticias al instante, en un solo lugar
-                        </p>
-                    </div>
-                </div>
+                </Link>
 
                 {/* <div className="ml-auto flex-1 max-w-md">
                     <form className="relative">
