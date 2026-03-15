@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { createServerSupabaseClient } from "@/lib/supabase-server";
 import { Tables } from "@/types/database.types";
+import { Categories } from "@/components/categories/Categories";
 
 interface ArticlePageProps {
   params: {
@@ -69,17 +70,23 @@ export async function generateMetadata(
 
 export default async function ArticlePage({ params }: ArticlePageProps) {
   const supabase = await createServerSupabaseClient();
-  const {  id } = await params;
-
+  const { id } = await params;
   const articleId = Number(id);
 
-  const { data, error } = await supabase
-    .from("articles")
-    .select("*, categories(*)")
-    .eq("id", articleId)
-    .maybeSingle();
+  const [{ data: articleData, error }, { data: categoriesData }] =
+    await Promise.all([
+      supabase
+        .from("articles")
+        .select("*, categories(*)")
+        .eq("id", articleId)
+        .maybeSingle(),
+      supabase
+        .from("categories")
+        .select("*")
+        .order("name", { ascending: true }),
+    ]);
 
-  if (error || !data) {
+  if (error || !articleData) {
     return (
       <main className="mx-auto flex w-full max-w-6xl flex-1 flex-col gap-8 px-4 py-6 sm:px-6 lg:px-8">
         <p className="text-sm text-slate-600">
@@ -89,9 +96,18 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
     );
   }
 
-  const article = data as ArticleWithCategory;
+  const article = articleData as ArticleWithCategory;
+  const categories = (categoriesData ?? []) as Tables<"categories">[];
 
   return (
-    <div className="flex min-h-screen flex-col bg-white text-[#1a1a1a]"  dangerouslySetInnerHTML={{ __html: article.content ?? "" }}/>
+    <>
+      <Categories
+        categories={categories}
+        activeCategoryId={article.category_id ?? undefined}
+      />
+
+      <div className="flex min-h-screen flex-col bg-white text-[#1a1a1a]"  dangerouslySetInnerHTML={{ __html: article.content ?? "" }}/>
+
+    </>
   );
 }

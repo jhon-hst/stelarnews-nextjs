@@ -25,7 +25,7 @@ export function Header() {
                     </div>
                 </div>
 
-                <div className="ml-auto flex-1 max-w-md">
+                {/* <div className="ml-auto flex-1 max-w-md">
                     <form className="relative">
                     <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
                         <input
@@ -34,7 +34,7 @@ export function Header() {
                             className="w-full rounded-full border border-slate-200 bg-white px-9 py-2 text-sm text-slate-900 placeholder:text-slate-400 shadow-sm shadow-slate-200/80 focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500/30"
                         />
                     </form>
-                </div>
+                </div> */}
             </div>
         </header>
     );

@@ -1,4 +1,5 @@
 import { ItemArticle } from "@/components/article/Article";
+import { Categories } from "@/components/categories/Categories";
 import { ArticleType } from "@/utils/types";
 import { createServerSupabaseClient } from "@/lib/supabase-server";
 import { Tables } from "@/types/database.types";
@@ -10,16 +11,22 @@ type ArticleWithCategory = Tables<"articles"> & {
 export default async function Home() {
   const supabase = await createServerSupabaseClient();
 
-  const { data, error } = await supabase
-    .from("articles")
-    .select("*, categories(*)")
-    .order("created_at", { ascending: false });
+  const [{ data: articlesData, error }, { data: categoriesData }] =
+    await Promise.all([
+      supabase
+        .from("articles")
+        .select("*, categories(*)")
+        .order("created_at", { ascending: false }),
+      supabase.from("categories").select("*").order("name", { ascending: true }),
+    ]);
 
   if (error) {
     console.error("Error fetching articles", error);
   }
 
-  const typedData = (data ?? []) as ArticleWithCategory[];
+  console.log(articlesData);
+
+  const typedData = (articlesData ?? []) as ArticleWithCategory[];
 
   const articles: ArticleType[] = typedData.map((item) => ({
     id: item.id,
@@ -29,8 +36,11 @@ export default async function Home() {
     category: item.categories?.name ?? "Sin categoría",
   }));
 
-  return (
+  const categories = (categoriesData ?? []) as Tables<"categories">[];
 
+  return (
+      <>
+      <Categories categories={categories} activeCategoryId={undefined} />
 
       <main className="mx-auto flex w-full max-w-6xl flex-1 flex-col gap-8 px-4 py-6 sm:px-6 lg:px-8">
         <section className="flex flex-col gap-3">
@@ -54,7 +64,6 @@ export default async function Home() {
           ))}
         </section>
       </main>
-
-
+      </>
   );
 }

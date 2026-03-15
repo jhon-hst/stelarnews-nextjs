@@ -2,16 +2,16 @@
 inicializar supabase
     articles
     categories
+ocultar buscador
 
 
-    
+
 Conectar supabase
     home -> Cada 12 horas se actualiza la cache
     categories -> Cada 12 horas se actualiza la cache
     Article -> La cache se renueva manualmente
 Pulir estilos
 Cambiar textos que este por ahí 
-ocultar buscador
 agregar contenido politicas de privacidad
 agregar contenido terminos y condiciones
 agregar contenido Sobre nosotros
