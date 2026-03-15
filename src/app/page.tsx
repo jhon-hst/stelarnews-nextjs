@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { ItemArticle } from "@/components/article/Article";
 import { Categories } from "@/components/categories/Categories";
-import { ArticleType } from "@/utils/types";
 import { createServerSupabaseClient } from "@/lib/supabase-server";
 import { Tables } from "@/types/database.types";
 
@@ -57,11 +56,9 @@ export default async function Home() {
 
   const typedData = (articlesData ?? []) as ArticleWithCategory[];
 
-  const articles: ArticleType[] = typedData.map((item) => ({
-    id: item.id,
-    title: item.title ?? "",
-    image: item.image ?? "/logo.webp",
-    categoryId: item.category_id ?? 0,
+  type ArticleWithCategoryName = Tables<"articles"> & { category: string };
+  const articles: ArticleWithCategoryName[] = typedData.map((item) => ({
+    ...item,
     category: item.categories?.name ?? "Uncategorized",
   }));
 

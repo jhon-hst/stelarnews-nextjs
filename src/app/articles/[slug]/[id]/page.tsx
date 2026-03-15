@@ -3,6 +3,7 @@ import { createServerSupabaseClient } from "@/lib/supabase-server";
 import { Tables } from "@/types/database.types";
 import { Categories } from "@/components/categories/Categories";
 
+
 interface ArticlePageProps {
   params: {
     slug: string;

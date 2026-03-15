@@ -1,10 +1,8 @@
-export interface ArticleType {
-  id: number;
-  title: string;
-  category: string;
-  categoryId: number;
-  image: string;
+export interface ArticleType extends Tables<"articles"> {
+   category: string 
 }
+
+
 
 export interface ArticleSectionType {
   id: number;
