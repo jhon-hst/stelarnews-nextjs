@@ -15,11 +15,13 @@ type ArticleWithCategory = Tables<"articles"> & {
 };
 
 export async function generateMetadata(
-  props: ArticlePageProps
+  {params}: ArticlePageProps
 ): Promise<Metadata> {
   const supabase = await createServerSupabaseClient();
 
-  const articleId = Number(props.params.id);
+  const {id, slug} = await params
+
+  const articleId = Number(id);
 
   const { data } = await supabase
     .from("articles")
@@ -36,8 +38,8 @@ export async function generateMetadata(
   const image =  article?.image ? `${process.env.NEXT_PUBLIC_IMAGE_URL}/${article?.image}` : "/logo.webp";
   const categoryName = article?.categories?.name ?? undefined;
 
-  const urlSlug = props.params.slug || "featured-article";
-  const urlId = props.params.id || "1";
+  const urlSlug = slug || "featured-article";
+  const urlId = id || "1";
   const url = `https://estelarnews.com/articles/${urlSlug}/${urlId}`;
 
   return {
