@@ -10,7 +10,7 @@ export function Header() {
                     <div className="flex items-center gap-2">
                         <div className="relative h-9 w-9 overflow-hidden rounded-sm ">
                             <Image
-                                src="/icon.webp"
+                                src="/logo.webp"
                                 alt="EstelarNews logo"
                                 fill
                                 sizes="36px"

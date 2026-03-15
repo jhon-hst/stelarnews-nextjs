@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { ItemArticle } from "@/components/article/Article";
 import { Categories } from "@/components/categories/Categories";
 import { createServerSupabaseClient } from "@/lib/supabase-server";
@@ -15,6 +16,60 @@ type ArticleWithCategory = Tables<"articles"> & {
   categories: Tables<"categories"> | null;
 };
 
+export async function generateMetadata(
+  props: CategoryPageProps
+): Promise<Metadata> {
+  const supabase = await createServerSupabaseClient();
+
+  const categoryId = Number(props.params.id);
+
+  const { data } = await supabase
+    .from("categories")
+    .select("*")
+    .eq("id", categoryId)
+    .maybeSingle();
+
+  const category = data as Tables<"categories"> | null;
+  const categoryName = category?.name ?? "Category";
+
+  const title = `${categoryName} News`;
+  const description = `Explore curated news and articles in the ${categoryName.toLowerCase()} category on EstelarNews.`;
+  const image = "/logo.webp";
+
+  const urlSlug = props.params.slug || "news";
+  const urlId = props.params.id || "1";
+  const url = `https://estelarnews.com/categories/${urlSlug}/${urlId}`;
+
+  return {
+    title: `${title} | EstelarNews`,
+    description,
+    keywords: [categoryName, "news", "category", "EstelarNews"],
+    openGraph: {
+      title: `${title} | EstelarNews`,
+      description,
+      url,
+      type: "website",
+      images: [
+        {
+          url: image,
+          alt: title,
+        },
+      ],
+      siteName: "EstelarNews",
+      locale: "en_US",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${title} | EstelarNews`,
+      description,
+      images: [image],
+    },
+    alternates: {
+      canonical: url,
+    },
+  };
+}
+
 export default async function CategoryPage({ params }: CategoryPageProps) {
   const supabase = await createServerSupabaseClient();
   const {  id } = await params;
@@ -24,7 +79,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
     return (
       <main className="mx-auto flex w-full max-w-6xl flex-1 flex-col gap-8 px-4 py-6 sm:px-6 lg:px-8">
         <p className="text-sm text-slate-600">
-          Categoría no válida.
+          Invalid category.
         </p>
       </main>
     );
@@ -49,9 +104,9 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
   const articles: ArticleType[] = typedArticles.map((item) => ({
     id: item.id,
     title: item.title ?? "",
-    image: item.image ?? "/window.svg",
+    image: item.image ?? "/logo.webp",
     categoryId: item.category_id ?? 0,
-    category: item.categories?.name ?? "Sin categoría",
+    category: item.categories?.name ?? "Uncategorized",
   }));
 
   const categories = (categoriesData ?? []) as Tables<"categories">[];
@@ -64,17 +119,17 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
       <main className="mx-auto flex w-full max-w-6xl flex-1 flex-col gap-8 px-4 py-6 sm:px-6 lg:px-8">
         <section className="flex flex-col gap-3">
           <p className="text-xs uppercase tracking-[0.25em] text-[#1a1a1a]">
-            Categoría
+            Category
           </p>
           <h1 className="font-display text-2xl font-semibold tracking-tight sm:text-3xl">
-            {currentCategory?.name ?? "Artículos por categoría"}
+            {currentCategory?.name ?? "Articles by category"}
           </h1>
         </section>
 
         <section className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
           {articles.length === 0 ? (
             <p className="text-sm text-slate-600">
-              No hay artículos disponibles para esta categoría.
+              There are no articles available for this category.
             </p>
           ) : (
             articles.map((article) => (

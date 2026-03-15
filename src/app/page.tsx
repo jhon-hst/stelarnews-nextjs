@@ -1,8 +1,39 @@
+import type { Metadata } from "next";
 import { ItemArticle } from "@/components/article/Article";
 import { Categories } from "@/components/categories/Categories";
 import { ArticleType } from "@/utils/types";
 import { createServerSupabaseClient } from "@/lib/supabase-server";
 import { Tables } from "@/types/database.types";
+
+export const dynamic = "force-static";
+
+export const metadata: Metadata = {
+  title: "News Refined for the Modern Reader",
+  description:
+    "Stay ahead with curated, high-quality news stories analyzed and distilled for the modern digital reader.",
+  openGraph: {
+    title: "News Refined for the Modern Reader",
+    description:
+      "Stay ahead with curated, high-quality news stories analyzed and distilled for the modern digital reader.",
+    url: "/",
+    type: "website",
+    images: [
+      {
+        url: "/logo.webp",
+        width: 1200,
+        height: 630,
+        alt: "EstelarNews – News Refined for the Modern Reader",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "News Refined for the Modern Reader",
+    description:
+      "Stay ahead with curated, high-quality news stories analyzed and distilled for the modern digital reader.",
+    images: ["/logo.webp"],
+  },
+};
 
 type ArticleWithCategory = Tables<"articles"> & {
   categories: Tables<"categories"> | null;
@@ -29,9 +60,9 @@ export default async function Home() {
   const articles: ArticleType[] = typedData.map((item) => ({
     id: item.id,
     title: item.title ?? "",
-    image: item.image ?? "/window.svg",
+    image: item.image ?? "/logo.webp",
     categoryId: item.category_id ?? 0,
-    category: item.categories?.name ?? "Sin categoría",
+    category: item.categories?.name ?? "Uncategorized",
   }));
 
   const categories = (categoriesData ?? []) as Tables<"categories">[];

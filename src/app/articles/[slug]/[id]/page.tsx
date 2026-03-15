@@ -29,24 +29,29 @@ export async function generateMetadata(
 
   const article = data as ArticleWithCategory | null;
 
-  const title = article?.title ?? "Artículo";
+  const title = article?.title ?? "Article";
   const description =
     article?.description ??
-    "Lee este artículo en EstelarNews, tu portal de noticias curadas.";
-  const image = article?.image ?? "/window.svg";
+    "Read this curated news article on EstelarNews, your modern news portal.";
+  const image = article?.image ?? "/logo.webp";
+  const categoryName = article?.categories?.name ?? undefined;
 
-  const urlSlug = props.params.slug || "15-lugares-mas-hermosos";
+  const urlSlug = props.params.slug || "featured-article";
   const urlId = props.params.id || "1";
-  const url = `https://eEstelarNews.com/articles/${urlSlug}/${urlId}`;
+  const url = `https://estelarnews.com/articles/${urlSlug}/${urlId}`;
 
   return {
     title: `${title} | EstelarNews`,
     description,
+    keywords: categoryName
+      ? [title, categoryName, "news", "article", "EstelarNews"]
+      : [title, "news", "article", "EstelarNews"],
     openGraph: {
       title: `${title} | EstelarNews`,
       description,
       url,
       type: "article",
+      section: categoryName,
       images: [
         {
           url: image,
@@ -54,7 +59,7 @@ export async function generateMetadata(
         },
       ],
       siteName: "EstelarNews",
-      locale: "es_ES",
+      locale: "en_US",
     },
     twitter: {
       card: "summary_large_image",
@@ -90,7 +95,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
     return (
       <main className="mx-auto flex w-full max-w-6xl flex-1 flex-col gap-8 px-4 py-6 sm:px-6 lg:px-8">
         <p className="text-sm text-slate-600">
-          No se encontró el artículo solicitado.
+          The requested article was not found.
         </p>
       </main>
     );
