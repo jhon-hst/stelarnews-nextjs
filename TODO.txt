@@ -10,14 +10,14 @@ agregar contenido terminos y condiciones
 agregar contenido Sobre nosotros
 Agregar logo
 Agregar favicon
-
-
-
 revisar el SEO de cada pagina incluido sobre nosotros, politicas y terminos
     titulo 
     descripcion
     image
     html tags
+
+
+
 agregar articulos
     crear images 
     subir images a cloudflare
@@ -34,6 +34,7 @@ hacer publicidad
 notificar en google search
 usar las herramientas de analytics de facebook
 usar las herramientas de analytics de tiktok
+migas de pan
 
 
 

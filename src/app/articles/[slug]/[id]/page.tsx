@@ -33,7 +33,7 @@ export async function generateMetadata(
   const description =
     article?.description ??
     "Read this curated news article on EstelarNews, your modern news portal.";
-  const image = article?.image ?? "/logo.webp";
+  const image =  article?.image ? `${process.env.NEXT_PUBLIC_IMAGE_URL}/${article?.image}` : "/logo.webp";
   const categoryName = article?.categories?.name ?? undefined;
 
   const urlSlug = props.params.slug || "featured-article";
@@ -91,6 +91,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
         .order("name", { ascending: true }),
     ]);
 
+
   if (error || !articleData) {
     return (
       <main className="mx-auto flex w-full max-w-6xl flex-1 flex-col gap-8 px-4 py-6 sm:px-6 lg:px-8">
@@ -112,7 +113,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
       />
 
       <div className="flex min-h-screen flex-col bg-white text-[#1a1a1a]"  dangerouslySetInnerHTML={{ __html: article.content ?? "" }}/>
-
+ 
     </>
   );
 }
