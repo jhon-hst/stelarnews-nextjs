@@ -15,12 +15,11 @@ revisar el SEO de cada pagina incluido sobre nosotros, politicas y terminos
     descripcion
     image
     html tags
-
-
-
 agregar articulos
     crear images 
     subir images a cloudflare
+
+
 Conectar supabase
     home -> Cada 12 horas se actualiza la cache
     categories -> Cada 12 horas se actualiza la cache
@@ -36,6 +35,7 @@ usar las herramientas de analytics de facebook
 usar las herramientas de analytics de tiktok
 migas de pan
 
+10-lugares-mas-hermosos/scene_1.webp 
 
 
 WISHES:
