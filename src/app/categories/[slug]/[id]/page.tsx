@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
+import { unstable_cache } from "next/cache";
 import { ItemArticle } from "@/components/article/Article";
 import { Categories } from "@/components/categories/Categories";
-import { createServerSupabaseClient } from "@/lib/supabase-server";
+import { createClient } from "@/lib/supabase-client";
 import { Tables } from "@/types/database.types";
 
 type CategoryPageProps = {
@@ -15,74 +16,10 @@ type ArticleWithCategory = Tables<"articles"> & {
   categories: Tables<"categories"> | null;
 };
 
-export async function generateMetadata(
-  props: CategoryPageProps
-): Promise<Metadata> {
-  const supabase = await createServerSupabaseClient();
+type ArticleWithCategoryName = Tables<"articles"> & { category: string };
 
-  const categoryId = Number(props.params.id);
-
-  const { data } = await supabase
-    .from("categories")
-    .select("*")
-    .eq("id", categoryId)
-    .maybeSingle();
-
-  const category = data as Tables<"categories"> | null;
-  const categoryName = category?.name ?? "Category";
-
-  const title = `${categoryName} News`;
-  const description = `Explore curated news and articles in the ${categoryName.toLowerCase()} category on EstelarNews.`;
-  const image = "/logo.webp";
-
-  const urlSlug = props.params.slug || "news";
-  const urlId = props.params.id || "1";
-  const url = `https://estelarnews.com/categories/${urlSlug}/${urlId}`;
-
-  return {
-    title: `${title} | EstelarNews`,
-    description,
-    keywords: [categoryName, "news", "category", "EstelarNews"],
-    openGraph: {
-      title: `${title} | EstelarNews`,
-      description,
-      url,
-      type: "website",
-      images: [
-        {
-          url: image,
-          alt: title,
-        },
-      ],
-      siteName: "EstelarNews",
-      locale: "en_US",
-    },
-    twitter: {
-      card: "summary_large_image",
-      title: `${title} | EstelarNews`,
-      description,
-      images: [image],
-    },
-    alternates: {
-      canonical: url,
-    },
-  };
-}
-
-export default async function CategoryPage({ params }: CategoryPageProps) {
-  const supabase = await createServerSupabaseClient();
-  const {  id } = await params;
-  const categoryId = Number(id);
-
-  if (Number.isNaN(categoryId)) {
-    return (
-      <main className="mx-auto flex w-full max-w-6xl flex-1 flex-col gap-8 px-4 py-6 sm:px-6 lg:px-8">
-        <p className="text-sm text-slate-600">
-          Invalid category.
-        </p>
-      </main>
-    );
-  }
+async function fetchCategoryData(categoryId: number) {
+  const supabase = createClient();
 
   const [{ data: categoriesData }, { data: articlesData, error }] =
     await Promise.all([
@@ -94,25 +31,96 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
         .order("created_at", { ascending: false }),
     ]);
 
-  if (error) {
-    console.error("Error fetching articles by category", error);
-  }
+  if (error) console.error("Error fetching articles by category", error);
 
-  const typedArticles = (articlesData ?? []) as ArticleWithCategory[];
-
-  type ArticleWithCategoryName = Tables<"articles"> & { category: string };
-  const articles: ArticleWithCategoryName[] = typedArticles.map((item) => ({
+  const articles: ArticleWithCategoryName[] = (
+    (articlesData ?? []) as ArticleWithCategory[]
+  ).map((item) => ({
     ...item,
     category: item.categories?.name ?? "Uncategorized",
   }));
 
   const categories = (categoriesData ?? []) as Tables<"categories">[];
+
+  return { articles, categories };
+}
+
+async function fetchCategoryMeta(categoryId: number) {
+  const supabase = createClient();
+
+  const { data } = await supabase
+    .from("categories")
+    .select("*")
+    .eq("id", categoryId)
+    .maybeSingle();
+
+  return data as Tables<"categories"> | null;
+}
+
+const getCachedCategoryData = unstable_cache(
+  async (categoryId: number) => fetchCategoryData(categoryId),
+  ["category-page"],
+  { tags: ["category-page", "articles", "categories"], revalidate: false }
+);
+
+const getCachedCategoryMeta = unstable_cache(
+  async (categoryId: number) => fetchCategoryMeta(categoryId),
+  ["category-meta"],
+  { tags: ["category-meta", "categories"], revalidate: false }
+);
+
+export async function generateMetadata(props: CategoryPageProps): Promise<Metadata> {
+
+  const {id, slug} = await props.params
+  const categoryId = Number(id);
+  const category = await getCachedCategoryMeta(categoryId);
+
+  const categoryName = category?.name ?? "Category";
+  const title = `${categoryName} News`;
+  const description = `Explore curated news and articles in the ${categoryName.toLowerCase()} category on EstelarNews.`;
+  const url = `https://estelarnews.com/categories/${slug ?? "news"}/${id ?? "1"}`;
+
+  return {
+    title: `${title} | EstelarNews`,
+    description,
+    keywords: [categoryName, "news", "category", "EstelarNews"],
+    openGraph: {
+      title: `${title} | EstelarNews`,
+      description,
+      url,
+      type: "website",
+      images: [{ url: "/logo.webp", alt: title }],
+      siteName: "EstelarNews",
+      locale: "en_US",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${title} | EstelarNews`,
+      description,
+      images: ["/logo.webp"],
+    },
+    alternates: { canonical: url },
+  };
+}
+
+export default async function CategoryPage({ params }: CategoryPageProps) {
+  const { id } = await params;
+  const categoryId = Number(id);
+
+  if (Number.isNaN(categoryId)) {
+    return (
+      <main className="mx-auto flex w-full max-w-6xl flex-1 flex-col gap-8 px-4 py-6 sm:px-6 lg:px-8">
+        <p className="text-sm text-slate-600">Invalid category.</p>
+      </main>
+    );
+  }
+
+  const { articles, categories } = await getCachedCategoryData(categoryId);
   const currentCategory = categories.find((c) => c.id === categoryId);
 
   return (
     <>
       <Categories categories={categories} activeCategoryId={categoryId} />
-
       <main className="mx-auto flex w-full max-w-6xl flex-1 flex-col gap-8 px-4 py-6 sm:px-6 lg:px-8">
         <section className="flex flex-col gap-3">
           <p className="text-xs uppercase tracking-[0.25em] text-[#1a1a1a]">
@@ -122,7 +130,6 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
             {currentCategory?.name ?? "Articles by category"}
           </h1>
         </section>
-
         <section className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
           {articles.length === 0 ? (
             <p className="text-sm text-slate-600">
