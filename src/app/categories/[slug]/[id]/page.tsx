@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { ItemArticle } from "@/components/article/Article";
 import { Categories } from "@/components/categories/Categories";
 import { createServerSupabaseClient } from "@/lib/supabase-server";
-import { ArticleType } from "@/utils/types";
 import { Tables } from "@/types/database.types";
 
 type CategoryPageProps = {
@@ -101,11 +100,9 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
 
   const typedArticles = (articlesData ?? []) as ArticleWithCategory[];
 
-  const articles: ArticleType[] = typedArticles.map((item) => ({
-    id: item.id,
-    title: item.title ?? "",
-    image: item.image ?? "/logo.webp",
-    categoryId: item.category_id ?? 0,
+  type ArticleWithCategoryName = Tables<"articles"> & { category: string };
+  const articles: ArticleWithCategoryName[] = typedArticles.map((item) => ({
+    ...item,
     category: item.categories?.name ?? "Uncategorized",
   }));
 
