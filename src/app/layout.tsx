@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Inter, Montserrat } from "next/font/google";
-import { GoogleAnalytics } from '@next/third-parties/google'
+import { GoogleAnalytics } from "@next/third-parties/google";
 
 import "./globals.css";
 import { Footer } from "@/components/footer/Footer";
@@ -55,6 +55,8 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const gaId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID ?? "G-7C9LQ24BQD";
+
   return (
     <html lang="en">
       <body
@@ -66,7 +68,7 @@ export default function RootLayout({
           <Footer />
         </div>
       </body>
-      <GoogleAnalytics gaId="7C9LQ24BQD" />
+      <GoogleAnalytics gaId={gaId} />
     </html>
   );
 }
