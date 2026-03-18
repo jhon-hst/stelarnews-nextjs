@@ -113,17 +113,45 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
         categories={categories}
         activeCategoryId={article.category_id ?? undefined}
       />
+   
+
       <AdBanner dimentions={"dynamic"}/>
-      <div
-        className="flex min-h-screen flex-col bg-white text-[#1a1a1a]"
-        dangerouslySetInnerHTML={{ __html: article.content ?? "" }}
-      />
+      
+            {/* Wrapper con banners laterales en desktop */}
+      <div className="relative flex justify-center">
+        
+        {/* Banner izquierdo */}
+        <div className="hidden xl:flex flex-col items-center top-4 h-fit gap-4">
+        <AdBanner dimentions={"160x600"} delay={500} />
+        <AdBanner dimentions={"160x600"} delay={500} />
+        <AdBanner dimentions={"160x600"} delay={500} />
+        <AdBanner dimentions={"160x600"} delay={500} />
+        </div>
+
+        {/* Contenido principal */}
+        <div className="flex min-h-screen flex-col bg-white text-[#1a1a1a] w-full">
+       
+          <div
+              className="flex min-h-screen flex-col bg-white text-[#1a1a1a]"
+              dangerouslySetInnerHTML={{ __html: article.content ?? "" }}
+            />
+          </div>
+
+        {/* Banner derecho */}
+        <div className="hidden xl:flex flex-col items-center top-4 h-fit gap-4">
+          <AdBanner dimentions={"160x600"} delay={500} />
+          <AdBanner dimentions={"160x600"} delay={500} />
+          <AdBanner dimentions={"160x600"} delay={500} />
+          <AdBanner dimentions={"160x600"} delay={500} />
+        </div>
+      </div>
+
       <div className="mx-auto flex w-full max-w-4xl flex-1 flex-col gap-8 px-4 py-6 sm:px-6 lg:px-8">
           <h2 className="text-2xl font-bold text-slate-900">You may also be interested in</h2>
-        </div>
-        <AdNative/>
-        <AdNative/>
-        <AdNative/>
+      </div>
+      <AdNative/>
+      <AdNative/>
+      <AdNative/>
     </>
   );
 }

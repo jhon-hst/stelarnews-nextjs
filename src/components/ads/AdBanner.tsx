@@ -29,47 +29,58 @@ function getBestFitBanner(containerWidth: number): BannersDimentionsType | null 
   ) ?? null
 }
 
-export default function AdBanner({ dimentions }: { dimentions: typeof bannersDimentions[number]['id'] | 'dynamic' }) {
+export default function AdBanner({ dimentions, delay = 0 }: { dimentions: typeof bannersDimentions[number]['id'] | 'dynamic',   delay?: number  }) {
   const banner = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    const el = banner.current
-    if (!el || el.firstChild) return
+   
 
-    let selected: BannersDimentionsType | undefined
-
-    if (dimentions === 'dynamic') {
-      const availableWidth  = el.parentElement?.clientWidth  ?? window.innerWidth
-      selected = getBestFitBanner(availableWidth) ?? undefined
-    } else {
-      selected = bannersDimentions.find(({ id }) => id === dimentions)
-    }
-    console.log(selected)
-    if (!selected) return
-
-    const atOptions = {
-      ...selected,
-      format: 'iframe',
-      params: {}
-    }
-
-    const uniqueVar = `atOptions_${Math.random().toString(36).slice(2)}`
-
-    const conf = document.createElement('script')
-    conf.innerHTML = `var ${uniqueVar} = ${JSON.stringify(atOptions)}; var atOptions = ${uniqueVar};`
-
-    const script = document.createElement('script')
-    script.type = 'text/javascript'
-    script.src = `//www.highperformanceformat.com/${selected.key}/invoke.js`
-
-    el.append(conf)
-    el.append(script)
+    const timer = setTimeout(() => {
+      const el = banner.current
+      if (!el) return
+  
+      // Limpiar siempre antes de inyectar
+      el.innerHTML = ''
+  
+      let selected: BannersDimentionsType | undefined
+  
+      if (dimentions === 'dynamic') {
+        const availableWidth = el.parentElement?.clientWidth ?? window.innerWidth
+        selected = getBestFitBanner(availableWidth) ?? undefined
+      } else {
+        selected = bannersDimentions.find(({ id }) => id === dimentions)
+      }
+  
+      if (!selected) return
+  
+      const atOptions = {
+        ...selected,
+        format: 'iframe',
+        params: {}
+      }
+  
+      const uniqueVar = `atOptions_${Math.random().toString(36).slice(2)}`
+  
+      const conf = document.createElement('script')
+      conf.innerHTML = `var ${uniqueVar} = ${JSON.stringify(atOptions)}; var atOptions = ${uniqueVar};`
+  
+      const script = document.createElement('script')
+      script.type = 'text/javascript'
+      script.src = `//www.highperformanceformat.com/${selected.key}/invoke.js`
+  
+      el.append(conf)
+      el.append(script)
+  
+  
+    }, delay)
 
     return () => {
-      el.innerHTML = ''
+      clearTimeout(timer)
+      if (banner.current) banner.current.innerHTML = ''
     }
-  }, [dimentions])
 
+  }, [dimentions])
+  
   return (
     <div
       className="mx-2 my-5 flex justify-center items-center text-white text-center"
