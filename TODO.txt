@@ -41,3 +41,4 @@ WISHES:
 idiomas
 mejora de estilos
 pensar si agregar el buscador
+ 

@@ -2,44 +2,78 @@
 
 import { useEffect, useRef } from 'react'
 
-export default function AdBanner() {
-    const banner = useRef<HTMLDivElement>(null)
+type BannersDimentionsType = {
+  id: string;
+  height: number;
+  width: number;
+  key: string;
+}
 
-    useEffect(() => {
-        const el = banner.current
-        if (!el || el.firstChild) return
+const bannersDimentions: BannersDimentionsType[] = [
+  { id: "728x90",  width: 728, height: 90,  key: '7412f5bc9c86d823cd5ae885b48b686b' },
+  { id: "468x60",  width: 468, height: 60,  key: '2aed314c977f704204791377c85a1a8c' },
+  { id: "320x50",  width: 320, height: 50,  key: 'd86e32b9c9638d32cf822700ec819d06' },
+  { id: "300x250", width: 300, height: 250, key: 'fdf7cf6b9d059e107f437dace972672d' },
+  { id: "160x300", width: 160, height: 300, key: '6b3622cb929b38a21c09e582ea6becb7' },
+  { id: "160x600", width: 160, height: 600, key: '869515bd1d5f50615fd4d02136403d32' },
+]
 
-        const atOptions = {
-            key: '7412f5bc9c86d823cd5ae885b48b686b',
-            format: 'iframe',
-            height: 90,
-            width: 728,
-            params: {}
-        }
+// Ordenados de mayor a menor área para la lógica dynamic
+const bannersByAreaDesc = [...bannersDimentions].sort(
+  (a, b) => b.width - a.width  // solo ancho, sin altura
+)
 
-        // Unique variable name per instance to avoid global collision
-        const uniqueVar = `atOptions_${Math.random().toString(36).slice(2)}`
+function getBestFitBanner(containerWidth: number): BannersDimentionsType | null {
+  return bannersByAreaDesc.find(
+    (b) => b.width <= containerWidth
+  ) ?? null
+}
 
-        const conf = document.createElement('script')
-        conf.innerHTML = `var ${uniqueVar} = ${JSON.stringify(atOptions)}; var atOptions = ${uniqueVar};`
+export default function AdBanner({ dimentions }: { dimentions: typeof bannersDimentions[number]['id'] | 'dynamic' }) {
+  const banner = useRef<HTMLDivElement>(null)
 
-        const script = document.createElement('script')
-        script.type = 'text/javascript'
-        script.src = `//www.highperformanceformat.com/${atOptions.key}/invoke.js`
+  useEffect(() => {
+    const el = banner.current
+    if (!el || el.firstChild) return
 
-        el.append(conf)
-        el.append(script)
+    let selected: BannersDimentionsType | undefined
 
-        return () => {
-            // Cleanup on unmount
-            el.innerHTML = ''
-        }
-    }, [])
+    if (dimentions === 'dynamic') {
+      const availableWidth  = el.parentElement?.clientWidth  ?? window.innerWidth
+      selected = getBestFitBanner(availableWidth) ?? undefined
+    } else {
+      selected = bannersDimentions.find(({ id }) => id === dimentions)
+    }
+    console.log(selected)
+    if (!selected) return
 
-    return (
-        <div
-            className="mx-2 my-5 flex justify-center items-center text-white text-center"
-            ref={banner}
-        />
-    )
+    const atOptions = {
+      ...selected,
+      format: 'iframe',
+      params: {}
+    }
+
+    const uniqueVar = `atOptions_${Math.random().toString(36).slice(2)}`
+
+    const conf = document.createElement('script')
+    conf.innerHTML = `var ${uniqueVar} = ${JSON.stringify(atOptions)}; var atOptions = ${uniqueVar};`
+
+    const script = document.createElement('script')
+    script.type = 'text/javascript'
+    script.src = `//www.highperformanceformat.com/${selected.key}/invoke.js`
+
+    el.append(conf)
+    el.append(script)
+
+    return () => {
+      el.innerHTML = ''
+    }
+  }, [dimentions])
+
+  return (
+    <div
+      className="mx-2 my-5 flex justify-center items-center text-white text-center"
+      ref={banner}
+    />
+  )
 }

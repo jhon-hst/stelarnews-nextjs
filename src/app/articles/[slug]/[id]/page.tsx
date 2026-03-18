@@ -113,7 +113,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
         categories={categories}
         activeCategoryId={article.category_id ?? undefined}
       />
-      <AdBanner/>
+      <AdBanner dimentions={"dynamic"}/>
       <div
         className="flex min-h-screen flex-col bg-white text-[#1a1a1a]"
         dangerouslySetInnerHTML={{ __html: article.content ?? "" }}
