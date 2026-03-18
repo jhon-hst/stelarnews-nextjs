@@ -5,6 +5,7 @@ import { Categories } from "@/components/categories/Categories";
 import { createClient } from "@/lib/supabase-client";
 import AdNative from "@/components/ads/AdNative";
 import AdBanner from "@/components/ads/AdBanner";
+import ArticleContent from "@/components/ads/ArticleContent";
 
 type ArticleWithCategory = Tables<"articles"> & {
   categories: Tables<"categories"> | null;
@@ -130,11 +131,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
 
         {/* Contenido principal */}
         <div className="flex min-h-screen flex-col bg-white text-[#1a1a1a] w-full">
-       
-          <div
-              className="flex min-h-screen flex-col bg-white text-[#1a1a1a]"
-              dangerouslySetInnerHTML={{ __html: article.content ?? "" }}
-            />
+            <ArticleContent html={article.content ?? ""} />
           </div>
 
         {/* Banner derecho */}
