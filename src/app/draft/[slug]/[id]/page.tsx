@@ -3,7 +3,6 @@ import { createServerSupabaseClient } from "@/lib/supabase-server";
 import { Tables } from "@/types/database.types";
 import { Categories } from "@/components/categories/Categories";
 import Image from "next/image";
-import AdBanner from "@/components/ads/AdBanner";
 
 
 interface ArticlePageProps {
@@ -183,7 +182,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
         Eliminate background chaos during calls. AI-driven noise suppression identifies and isolates your voice, removing sirens, dogs, or coffee shop chatter with surgical precision.
       </p>
       <div className="my-4 py-4 border-y border-slate-50 text-center">
-        <AdBanner/>
+
       </div>
     </section>
 
@@ -278,7 +277,6 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
 
 
         </div>
- 
     </>
   );
 }

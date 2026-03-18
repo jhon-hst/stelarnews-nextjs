@@ -3,6 +3,8 @@ import { unstable_cache } from "next/cache"; // <-- agrega esto
 import { Tables } from "@/types/database.types";
 import { Categories } from "@/components/categories/Categories";
 import { createClient } from "@/lib/supabase-client";
+import AdNative from "@/components/ads/AdNative";
+import AdBanner from "@/components/ads/AdBanner";
 
 type ArticleWithCategory = Tables<"articles"> & {
   categories: Tables<"categories"> | null;
@@ -111,10 +113,17 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
         categories={categories}
         activeCategoryId={article.category_id ?? undefined}
       />
+      <AdBanner/>
       <div
         className="flex min-h-screen flex-col bg-white text-[#1a1a1a]"
         dangerouslySetInnerHTML={{ __html: article.content ?? "" }}
       />
+      <div className="mx-auto flex w-full max-w-4xl flex-1 flex-col gap-8 px-4 py-6 sm:px-6 lg:px-8">
+          <h2 className="text-2xl font-bold text-slate-900">You may also be interested in</h2>
+        </div>
+        <AdNative/>
+        <AdNative/>
+        <AdNative/>
     </>
   );
 }

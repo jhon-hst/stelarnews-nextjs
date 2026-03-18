@@ -5,6 +5,7 @@ import { GoogleAnalytics } from "@next/third-parties/google";
 import "./globals.css";
 import { Footer } from "@/components/footer/Footer";
 import { Header } from "@/components/header/Header";
+// import Script from "next/script";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -59,6 +60,11 @@ export default function RootLayout({
 
   return (
     <html lang="en">
+      {/* Popunder ad clicks ocultos, mejor usar link inteligentes asi se controla cuando puede dar click */}
+      {/* <Script
+        src="https://pl28932105.effectivegatecpm.com/49/46/1c/49461c807d175833b911239087bf2701.js"
+        strategy="afterInteractive"
+      /> */}
       <body
         className={`${inter.variable} ${montserrat.variable} antialiased bg-background text-foreground`}
       >
@@ -66,7 +72,11 @@ export default function RootLayout({
           <Header />
           {children}
           <Footer />
+          
         </div>
+
+        {/* Social bar ads, son push notification, super invasivos, no se si funciona nunca lo puede probar  */}
+        {/* <Script src="https://pl28938789.effectivegatecpm.com/01/ef/ba/01efbaba958df57a0bb6247886e34ac3.js"   strategy="afterInteractive"/> */}
       </body>
       <GoogleAnalytics gaId={gaId} />
     </html>

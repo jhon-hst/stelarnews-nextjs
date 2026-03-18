@@ -22,12 +22,12 @@ Conectar supabase
     home -> Cada 12 horas se actualiza la cache
     categories -> Cada 12 horas se actualiza la cache
     Article -> La cache se renueva manualmente
-
-
-
-
 midleware para filtrar usaurios reales d
 Enviar para hacer search arbitrage 
+
+
+
+
 Agregar la publicidad en los articulos
 hacer publicidad
 notificar en google search
