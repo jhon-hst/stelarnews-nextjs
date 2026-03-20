@@ -1,0 +1,28 @@
+// import { NextResponse, userAgent } from 'next/server';
+// import type { NextRequest } from 'next/server';
+
+// export function middleware(request: NextRequest) {
+//   const { isBot } = userAgent(request);
+
+//   if (isBot) {
+//     return NextResponse.rewrite(new URL('/not-found', request.url));
+//   }
+
+//   return NextResponse.next();
+// }
+
+// // ✅ CRÍTICO: Sin esto, el middleware corre en CADA request
+// // (imágenes, CSS, fuentes, _next/static, favicon, etc.)
+// // Con esto, solo corre en las rutas de tu app → -90% de invocaciones
+// export const config = {
+//   matcher: [
+//     /*
+//      * Solo ejecutar en rutas de página, excluir:
+//      * - _next/static  (archivos estáticos del build)
+//      * - _next/image   (optimización de imágenes)
+//      * - favicon.ico
+//      * - archivos con extensión (imágenes, fuentes, etc.)
+//      */
+//     '/((?!_next/static|_next/image|favicon.ico|.*\\..*).*)',
+//   ],
+// };
