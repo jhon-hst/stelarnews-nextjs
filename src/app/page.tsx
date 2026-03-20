@@ -1,9 +1,12 @@
 import type { Metadata } from "next";
-import { unstable_cache } from "next/cache";
 import { ItemArticle } from "@/components/article/Article";
 import { Categories } from "@/components/categories/Categories";
 import { createClient } from "@/lib/supabase-client";
 import { Tables } from "@/types/database.types";
+
+// ✅ Renderizado estático — se genera una sola vez en build time
+export const dynamic = "force-static";
+export const revalidate = false;
 
 export const metadata: Metadata = {
   title: "News Refined for the Modern Reader",
@@ -58,14 +61,9 @@ async function fetchHomeData() {
   return { articles, categories };
 }
 
-const getCachedHomeData = unstable_cache(
-  fetchHomeData,
-  ["home-data"],
-  { tags: ["home-data", "articles", "categories"], revalidate: false }
-);
-
 export default async function Home() {
-  const { articles, categories } = await getCachedHomeData();
+  // ✅ Solo se ejecuta en build time, nunca en runtime
+  const { articles, categories } = await fetchHomeData();
 
   return (
     <>
@@ -79,7 +77,9 @@ export default async function Home() {
             News Refined for the Modern Reader
           </h1>
           <p className="max-w-2xl text-sm text-slate-600">
-            The most important stories, analyzed and simplified. Experience high-quality journalism designed for a fast-paced world. Welcome to the future of digital news.
+            The most important stories, analyzed and simplified. Experience
+            high-quality journalism designed for a fast-paced world. Welcome to
+            the future of digital news.
           </p>
         </section>
         <section className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">

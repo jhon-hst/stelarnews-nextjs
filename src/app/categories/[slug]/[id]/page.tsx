@@ -1,9 +1,12 @@
 import type { Metadata } from "next";
-import { unstable_cache } from "next/cache";
 import { ItemArticle } from "@/components/article/Article";
 import { Categories } from "@/components/categories/Categories";
 import { createClient } from "@/lib/supabase-client";
 import { Tables } from "@/types/database.types";
+
+// ✅ Renderizado completamente estático
+export const dynamic = "force-static";
+export const revalidate = false;
 
 type CategoryPageProps = {
   params: {
@@ -57,23 +60,25 @@ async function fetchCategoryMeta(categoryId: number) {
   return data as Tables<"categories"> | null;
 }
 
-const getCachedCategoryData = unstable_cache(
-  async (categoryId: number) => fetchCategoryData(categoryId),
-  ["category-page"],
-  { tags: ["category-page", "articles", "categories"], revalidate: false }
-);
+// ✅ Pre-genera todas las rutas de categorías en build time
+export async function generateStaticParams() {
+  const supabase = createClient();
+  const { data, error } = await supabase.from("categories").select("id, name");
 
-const getCachedCategoryMeta = unstable_cache(
-  async (categoryId: number) => fetchCategoryMeta(categoryId),
-  ["category-meta"],
-  { tags: ["category-meta", "categories"], revalidate: false }
-);
+  if (error || !data) return [];
+
+  return data.map((category) => ({
+    id: String(category.id),
+    slug: category.name
+      ? category.name.toLowerCase().replace(/\s+/g, "-")
+      : String(category.id),
+  }));
+}
 
 export async function generateMetadata(props: CategoryPageProps): Promise<Metadata> {
-
-  const {id, slug} = await props.params
+  const { id, slug } = await props.params;
   const categoryId = Number(id);
-  const category = await getCachedCategoryMeta(categoryId);
+  const category = await fetchCategoryMeta(categoryId);
 
   const categoryName = category?.name ?? "Category";
   const title = `${categoryName} News`;
@@ -115,7 +120,8 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
     );
   }
 
-  const { articles, categories } = await getCachedCategoryData(categoryId);
+  // ✅ Solo se ejecuta en build time, nunca en runtime
+  const { articles, categories } = await fetchCategoryData(categoryId);
   const currentCategory = categories.find((c) => c.id === categoryId);
 
   return (
