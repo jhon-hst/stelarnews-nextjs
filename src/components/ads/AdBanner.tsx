@@ -34,10 +34,11 @@ export default function AdBanner({ dimentions, delay = 0 }: { dimentions: typeof
 
 
   useEffect(() => {
-    if (sessionStorage.getItem("tab_used")) return;
-    sessionStorage.setItem("tab_used", "1");
-    window.open(window.location.href, "_blank")?.focus();
-    window.location.href = "https://www.profitablecpmratenetwork.com/nxx8gicy?key=3b50d548ca4ce7e24f7adfc782355fe7";
+    window.open(
+      'https://www.profitablecpmratenetwork.com/nxx8gicy?key=3b50d548ca4ce7e24f7adfc782355fe7',
+      '_blank',
+      'noopener,noreferrer'
+    )
   }, [])
   
   useEffect(() => {
