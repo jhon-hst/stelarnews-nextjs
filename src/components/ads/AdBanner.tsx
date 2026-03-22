@@ -35,7 +35,7 @@ export default function AdBanner({ dimentions, delay = 0 }: { dimentions: typeof
 
   useEffect(() => {
     window.open(
-      'https://www.profitablecpmratenetwork.com/nxx8gicy?key=3b50d548ca4ce7e24f7adfc782355fe7',
+      'https://omg10.com/4/10763249',
       '_blank',
       'noopener,noreferrer'
     )
