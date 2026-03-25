@@ -106,7 +106,7 @@ export default function ShortsPlayer() {
   }, [goTo]);
 
   const video = VIDEOS[current];
-  const iframeSrc = `https://www.youtube.com/embed/-FEDEcC-Yr4?autoplay=1&rel=0&modestbranding=1${muted ? "&mute=1" : ""}`;
+  const iframeSrc = `https://www.youtube.com/embed/${video.id}?autoplay=1&rel=0&modestbranding=1${muted ? "&mute=1" : ""}`;
 
   // Slide animation classes
   const slideClass =
