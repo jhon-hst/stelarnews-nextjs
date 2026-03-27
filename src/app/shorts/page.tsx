@@ -49,10 +49,11 @@ export default function YouTubeShortsViewer({ videos = DEFAULT_VIDEOS }: { video
   const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setIsMounted(true);
   }, []);
 
-  const sendCommand = useCallback((index: number, command: string, args: any[] = []) => {
+  const sendCommand = useCallback((index: number, command: string, args: unknown[] = []) => {
     const iframe = document.getElementById(`yt-player-${index}`) as HTMLIFrameElement;
     if (iframe?.contentWindow) {
       iframe.contentWindow.postMessage(JSON.stringify({ event: "command", func: command, args }), "*");
