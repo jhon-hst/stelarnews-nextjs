@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/set-state-in-effect */
 "use client";
 
 import { useEffect, useRef, useState, useCallback } from "react";
@@ -5,52 +6,37 @@ import { useEffect, useRef, useState, useCallback } from "react";
 export interface VideoItem {
   id: string;
   videoId: string;
-  title?: string;
+  title: string;
+  likes: string;
+  comments: string;
+  author: string;
 }
 
 const DEFAULT_VIDEOS: VideoItem[] = [
-  { id: "1", videoId: "KljXfBCU18w", title: "Video 1" },
-  { id: "2", videoId: "nS9etPTLFSM", title: "Video 2" },
-  { id: "3", videoId: "iJMjcBz1tIo", title: "Video 3" },
-  { id: "4", videoId: "THFAF3VN9GQ", title: "Video 4" },
-  { id: "5", videoId: "nCh8VmeYeWk", title: "Video 5" },
-  { id: "6", videoId: "KljXfBCU18w", title: "Video 1" },
-  { id: "7", videoId: "nS9etPTLFSM", title: "Video 2" },
-  { id: "8", videoId: "iJMjcBz1tIo", title: "Video 3" },
-  { id: "9", videoId: "THFAF3VN9GQ", title: "Video 4" },
-  { id: "10", videoId: "nCh8VmeYeWk", title: "Video 5" },
-  { id: "11", videoId: "KljXfBCU18w", title: "Video 1" },
-  { id: "12", videoId: "nS9etPTLFSM", title: "Video 2" },
-  { id: "13", videoId: "iJMjcBz1tIo", title: "Video 3" },
-  { id: "14", videoId: "THFAF3VN9GQ", title: "Video 4" },
-  { id: "15", videoId: "nCh8VmeYeWk", title: "Video 5" },
-  { id: "16", videoId: "KljXfBCU18w", title: "Video 1" },
-  { id: "17", videoId: "nS9etPTLFSM", title: "Video 2" },
-  { id: "18", videoId: "iJMjcBz1tIo", title: "Video 3" },
-  { id: "19", videoId: "THFAF3VN9GQ", title: "Video 4" },
-  { id: "20", videoId: "nCh8VmeYeWk", title: "Video 5" },
-  { id: "21", videoId: "KljXfBCU18w", title: "Video 1" },
-  { id: "22", videoId: "nS9etPTLFSM", title: "Video 2" },
-  { id: "23", videoId: "iJMjcBz1tIo", title: "Video 3" },
-  { id: "24", videoId: "THFAF3VN9GQ", title: "Video 4" },
-  { id: "25", videoId: "nCh8VmeYeWk", title: "Video 5" },
-  { id: "26", videoId: "KljXfBCU18w", title: "Video 1" },
-  { id: "27", videoId: "nS9etPTLFSM", title: "Video 2" },
-  { id: "28", videoId: "iJMjcBz1tIo", title: "Video 3" },
-  { id: "29", videoId: "THFAF3VN9GQ", title: "Video 4" },
-  { id: "30", videoId: "nCh8VmeYeWk", title: "Video 5" },
+  { id: "1", videoId: "KljXfBCU18w", title: "Cocinando en casa 🍳", likes: "12.5K", comments: "124", author: "@chef_master" },
+  { id: "2", videoId: "nS9etPTLFSM", title: "Increíble atardecer 🌅", likes: "8.2K", comments: "45", author: "@nature_vibe" },
+  { id: "3", videoId: "iJMjcBz1tIo", title: "Setup Gamer 2024 💻", likes: "45K", comments: "890", author: "@tech_reviews" },
+  { id: "4", videoId: "THFAF3VN9GQ", title: "Trucos de Next.js 🚀", likes: "3.1K", comments: "12", author: "@react_dev" },
+  { id: "5", videoId: "nCh8VmeYeWk", title: "Gatitos divertidos 🐱", likes: "105K", comments: "2.3K", author: "@cat_lover" },
+  { id: "6", videoId: "KljXfBCU18w", title: "Rutina de mañana ☀️", likes: "5.6K", comments: "34", author: "@fitness_life" },
+  { id: "7", videoId: "nS9etPTLFSM", title: "Viaje a Japón 🇯🇵", likes: "98K", comments: "1.1K", author: "@travel_pro" },
 ];
 
 export default function YouTubeShortsViewer({ videos = DEFAULT_VIDEOS }: { videos?: VideoItem[] }) {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isMuted, setIsMuted] = useState(true);
   const [isMounted, setIsMounted] = useState(false);
-  const [loadedVideos, setLoadedVideos] = useState<Set<number>>(new Set([0])); // Solo carga el primero
+  const [loadedVideos, setLoadedVideos] = useState<Set<number>>(new Set([0]));
+  const [isFullscreen, setIsFullscreen] = useState(false);
+  
   const scrollRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     setIsMounted(true);
+    const handleFsChange = () => setIsFullscreen(!!document.fullscreenElement);
+    document.addEventListener("fullscreenchange", handleFsChange);
+    return () => document.removeEventListener("fullscreenchange", handleFsChange);
   }, []);
 
   const sendCommand = useCallback((index: number, command: string, args: unknown[] = []) => {
@@ -67,7 +53,6 @@ export default function YouTubeShortsViewer({ videos = DEFAULT_VIDEOS }: { video
     sendCommand(activeIndex, "setVolume", [100]);
   }, [activeIndex, isMuted, sendCommand]);
 
-  // Detector de clic (Tu truco favorito que funciona)
   useEffect(() => {
     const monitorClick = setInterval(() => {
       if (document.activeElement?.tagName === "IFRAME" && isMuted) {
@@ -79,106 +64,140 @@ export default function YouTubeShortsViewer({ videos = DEFAULT_VIDEOS }: { video
     return () => clearInterval(monitorClick);
   }, [isMuted, unmuteAll]);
 
-  // NUEVA FUNCIÓN: Carga inteligente de videos cercanos
   const ensureVideosLoaded = useCallback((centerIndex: number) => {
     setLoadedVideos(prev => {
       const newLoaded = new Set(prev);
-      // Carga el video actual y los 2 siguientes (para precarga suave)
       for (let i = centerIndex; i <= Math.min(centerIndex + 2, videos.length - 1); i++) {
         newLoaded.add(i);
       }
-      // También el anterior por si hace scroll hacia atrás
-      if (centerIndex > 0) {
-        newLoaded.add(centerIndex - 1);
-      }
+      if (centerIndex > 0) newLoaded.add(centerIndex - 1);
       return newLoaded;
     });
   }, [videos.length]);
 
-  // Scroll Handler MEJORADO
   useEffect(() => {
     const el = scrollRef.current;
     if (!el || !isMounted) return;
-
     const onScroll = () => {
       const h = el.clientHeight;
       if (h === 0) return;
       const idx = Math.round(el.scrollTop / h);
-      
       if (idx !== activeIndex) {
         sendCommand(activeIndex, "pauseVideo");
         setActiveIndex(idx);
         sendCommand(idx, "playVideo");
-        if (!isMuted) {
-          sendCommand(idx, "unMute");
-          sendCommand(idx, "setVolume", [100]);
-        }
-        
-        // OPTIMIZACIÓN: Carga los videos cercanos cuando cambias
+        if (!isMuted) { sendCommand(idx, "unMute"); sendCommand(idx, "setVolume", [100]); }
         ensureVideosLoaded(idx);
       }
     };
-
     el.addEventListener("scroll", onScroll, { passive: true });
     return () => el.removeEventListener("scroll", onScroll);
   }, [activeIndex, isMounted, isMuted, sendCommand, ensureVideosLoaded]);
 
-  // NUEVA OPTIMIZACIÓN: Precarga inicial progresiva (sin bloquear)
   useEffect(() => {
     if (!isMounted) return;
-    
-    // Carga gradual de los primeros videos (no todos a la vez)
-    const timer = setTimeout(() => {
-      ensureVideosLoaded(0);
-    }, 500); // Espera medio segundo después del mount
-    
+    const timer = setTimeout(() => { ensureVideosLoaded(0); }, 500);
     return () => clearTimeout(timer);
   }, [isMounted, ensureVideosLoaded]);
+
+  // Alternar Fullscreen (Entrar / Salir)
+  const toggleFullscreen = () => {
+    if (!containerRef.current) return;
+    if (!document.fullscreenElement) {
+      containerRef.current.requestFullscreen().catch(() => {});
+    } else {
+      document.exitFullscreen();
+    }
+  };
 
   if (!isMounted) return <div style={{ background: "#000", height: "100svh" }} />;
 
   return (
-    <div style={{ position: "relative", width: "100%", height: "100svh", background: "#000", overflow: "hidden" }}>
+    <div ref={containerRef} style={{ position: "relative", width: "100%", height: "100svh", background: "#000", overflow: "hidden" }}>
       <style>{`
         .yt-scroll::-webkit-scrollbar { display: none; }
-        .mute-btn {
-          position: absolute; top: 20px; left: 20px; z-index: 100;
-          background: rgba(0, 0, 0, 0.6); color: white; border: 1px solid rgba(255,255,255,0.2);
-          padding: 10px 20px; border-radius: 30px; cursor: pointer;
-          font-weight: bold; backdrop-filter: blur(8px); transition: all 0.3s ease;
-        }
         
+        /* Contenedor Superior Izquierdo para botones */
+        .top-left-controls {
+          position: absolute; top: 20px; left: 20px; z-index: 100;
+          display: flex; align-items: center; gap: 12px;
+        }
+
+        .control-btn {
+          background: rgba(0, 0, 0, 0.5); color: white; border: 1px solid rgba(255,255,255,0.2);
+          border-radius: 30px; cursor: pointer; font-weight: bold;
+          backdrop-filter: blur(8px); transition: all 0.2s ease;
+          display: flex; align-items: center; justify-content: center;
+        }
+
+        .fs-btn { width: 44px; height: 44px; font-size: 20px; }
+        .mute-btn { padding: 0 20px; height: 44px; font-size: 13px; }
+
+        .control-btn:active { transform: scale(0.95); background: rgba(0,0,0,0.8); }
+      
         .video-container {
-          flex-shrink: 0; 
-          width: 100%; 
-          height: 100svh;
-          scroll-snap-align: start; 
-          scroll-snap-stop: always; 
-          position: relative; 
-          background: #000;
+          flex-shrink: 0; width: 100%; height: 100svh;
+          scroll-snap-align: start; scroll-snap-stop: always;
+          position: relative; background: #000;
         }
 
-        /* Placeholder para videos no cargados */
-        .video-placeholder {
-          width: 100%;
-          height: 100%;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          color: rgba(255,255,255,0.3);
-          font-size: 14px;
+        .tiktok-ui {
+          position: absolute; inset: 0;
+          pointer-events: none; z-index: 10;
+          display: flex; flex-direction: column;
+          justify-content: center; align-items: flex-end;
+          padding-right: 12px;
         }
 
-        .video-offscreen {
-          content-visibility: hidden; /* Cambiado de hidden a auto para mejor performance */
+        .icons-column {
+          pointer-events: auto;
+          display: flex; flex-direction: column;
+          align-items: center; gap: 20px;
         }
+
+        .ui-item {
+          display: flex; flex-direction: column;
+          align-items: center; color: white;
+          font-family: sans-serif; font-size: 12px;
+        }
+
+        .avatar-box {
+          width: 50px; height: 50px; border-radius: 50%;
+          border: 2px solid white; background: #333;
+          overflow: hidden; flex-shrink: 0;
+          display: flex; align-items: center; justify-content: center;
+          margin-bottom: 4px;
+        }
+
+        .avatar-box img { width: 100%; height: 100%; object-fit: cover; }
+
+        .big-icon { 
+          font-size: 34px; 
+          filter: drop-shadow(0 2px 4px rgba(0,0,0,0.8));
+          line-height: 1;
+        }
+
+        .video-info {
+          position: absolute; bottom: 40px; left: 15px;
+          color: white; pointer-events: none; text-shadow: 0 1px 4px rgba(0,0,0,0.8);
+          max-width: 75%;
+        }
+
+        .video-offscreen { content-visibility: hidden; }
       `}</style>
 
-      {isMuted && (
-        <button className="mute-btn" onClick={unmuteAll}>
-          🔊 Activar Sonido
+      {/* NUEVA BARRA DE CONTROLES SUPERIOR IZQUIERDA */}
+      <div className="top-left-controls">
+        <button className="control-btn fs-btn" onClick={toggleFullscreen} title="Pantalla Completa">
+          {isFullscreen ? "⧉" : "⛶"}
         </button>
-      )}
+
+        {isMuted && (
+          <button className="control-btn mute-btn" onClick={unmuteAll}>
+            🔊 Activar Sonido
+          </button>
+        )}
+      </div>
 
       <div
         ref={scrollRef}
@@ -194,22 +213,48 @@ export default function YouTubeShortsViewer({ videos = DEFAULT_VIDEOS }: { video
           const isLoaded = loadedVideos.has(index);
 
           return (
-            <div
-              key={video.id}
-              className={`video-container ${isFar ? "video-offscreen" : ""}`}
-            >
+            <div key={video.id} className={`video-container ${isFar ? "video-offscreen" : ""}`}>
               {isLoaded ? (
-                <iframe
-                  id={`yt-player-${index}`}
-                  src={`https://www.youtube-nocookie.com/embed/${video.videoId}?enablejsapi=1&autoplay=${index === 0 ? 1 : 0}&mute=1&controls=1&rel=0&playsinline=1&loop=1&playlist=${video.videoId}`}
-                  style={{ width: "100%", height: "100%", border: "none" }}
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  loading="lazy"
-                />
+                <>
+                  <iframe
+                    id={`yt-player-${index}`}
+                    src={`https://www.youtube-nocookie.com/embed/${video.videoId}?enablejsapi=1&autoplay=${index === 0 ? 1 : 0}&mute=1&controls=1&rel=0&playsinline=1&loop=1&playlist=${video.videoId}`}
+                    style={{ width: "100%", height: "100%", border: "none" }}
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  />
+                  
+                  <div className="tiktok-ui">
+                    <div className="icons-column">
+                      <div className="ui-item">
+                        <div className="avatar-box">
+                          <img src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${video.author}`} alt="p" />
+                        </div>
+                      </div>
+
+                      <div className="ui-item">
+                        <span className="big-icon">🤍</span>
+                        <b style={{marginTop: '2px'}}>{video.likes}</b>
+                      </div>
+
+                      <div className="ui-item">
+                        <span className="big-icon">💬</span>
+                        <b style={{marginTop: '2px'}}>{video.comments}</b>
+                      </div>
+
+                      <div className="ui-item">
+                        <span className="big-icon" style={{fontSize: '30px'}}>🚀</span>
+                        <b style={{marginTop: '2px'}}>Share</b>
+                      </div>
+                    </div>
+
+                    <div className="video-info">
+                      <b style={{ fontSize: '17px' }}>{video.author}</b>
+                      <p style={{ margin: '6px 0 0', fontSize: '15px', lineHeight: '1.4' }}>{video.title}</p>
+                    </div>
+                  </div>
+                </>
               ) : (
-                <div className="video-placeholder">
-                  {/* Placeholder silencioso - se carga cuando te acerques */}
-                </div>
+                <div className="video-placeholder" />
               )}
             </div>
           );
