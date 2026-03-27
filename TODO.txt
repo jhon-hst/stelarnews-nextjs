@@ -42,3 +42,16 @@ idiomas
 mejora de estilos
 pensar si agregar el buscador
  
+
+
+
+ERROR: al llegar a 15 se pone lento, quizas pasar a la siguiente pagina o usar una librería
+Pasar de un video a la vez
+
+agregar pantalla completa
+agregar iconos para que parezca tiktok o youtube
+
+
+agregar la publicidad banner
+agregar publicidad intercalada
+buscar videos

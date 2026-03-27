@@ -153,6 +153,7 @@ export default function YouTubeShortsViewer({ videos = DEFAULT_VIDEOS }: { video
           width: 100%; 
           height: 100svh;
           scroll-snap-align: start; 
+          scroll-snap-stop: always; 
           position: relative; 
           background: #000;
         }
@@ -169,7 +170,7 @@ export default function YouTubeShortsViewer({ videos = DEFAULT_VIDEOS }: { video
         }
 
         .video-offscreen {
-          content-visibility: auto; /* Cambiado de hidden a auto para mejor performance */
+          content-visibility: hidden; /* Cambiado de hidden a auto para mejor performance */
         }
       `}</style>
 
