@@ -69,9 +69,9 @@ export default function RootLayout({
         className={`${inter.variable} ${montserrat.variable} antialiased bg-background text-foreground`}
       >
         <div className="flex min-h-screen flex-col bg-white text-[#1a1a1a]">
-          <Header />
+          {/* <Header /> */}
           {children}
-          <Footer />
+          {/* <Footer /> */}
           
         </div>
 
