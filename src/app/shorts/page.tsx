@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/set-state-in-effect */
 "use client";
 
+import AdBanner from "@/components/ads/AdBanner";
 import { useEffect, useRef, useState, useCallback } from "react";
 
 export interface VideoItem {
@@ -28,7 +29,6 @@ export default function YouTubeShortsViewer({ videos = DEFAULT_VIDEOS }: { video
   const [isMounted, setIsMounted] = useState(false);
   const [loadedVideos, setLoadedVideos] = useState<Set<number>>(new Set([0]));
   const [isFullscreen, setIsFullscreen] = useState(false);
-  
   const scrollRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -36,7 +36,11 @@ export default function YouTubeShortsViewer({ videos = DEFAULT_VIDEOS }: { video
     setIsMounted(true);
     const handleFsChange = () => setIsFullscreen(!!document.fullscreenElement);
     document.addEventListener("fullscreenchange", handleFsChange);
-    return () => document.removeEventListener("fullscreenchange", handleFsChange);
+    document.addEventListener("webkitfullscreenchange", handleFsChange); // Safari/iOS
+    return () => {
+      document.removeEventListener("fullscreenchange", handleFsChange);
+      document.removeEventListener("webkitfullscreenchange", handleFsChange);
+    };
   }, []);
 
   const sendCommand = useCallback((index: number, command: string, args: unknown[] = []) => {
@@ -100,13 +104,23 @@ export default function YouTubeShortsViewer({ videos = DEFAULT_VIDEOS }: { video
     return () => clearTimeout(timer);
   }, [isMounted, ensureVideosLoaded]);
 
-  // Alternar Fullscreen (Entrar / Salir)
+  // Arreglo para Fullscreen Mobile
   const toggleFullscreen = () => {
-    if (!containerRef.current) return;
-    if (!document.fullscreenElement) {
-      containerRef.current.requestFullscreen().catch(() => {});
+    const docElm = containerRef.current as any;
+    if (!document.fullscreenElement && !(document as any).webkitFullscreenElement) {
+      if (docElm.requestFullscreen) {
+        docElm.requestFullscreen();
+      } else if (docElm.webkitRequestFullscreen) {
+        docElm.webkitRequestFullscreen();
+      } else if (docElm.msRequestFullscreen) {
+        docElm.msRequestFullscreen();
+      }
     } else {
-      document.exitFullscreen();
+      if (document.exitFullscreen) {
+        document.exitFullscreen();
+      } else if ((document as any).webkitExitFullscreen) {
+        (document as any).webkitExitFullscreen();
+      }
     }
   };
 
@@ -116,8 +130,7 @@ export default function YouTubeShortsViewer({ videos = DEFAULT_VIDEOS }: { video
     <div ref={containerRef} style={{ position: "relative", width: "100%", height: "100svh", background: "#000", overflow: "hidden" }}>
       <style>{`
         .yt-scroll::-webkit-scrollbar { display: none; }
-        
-        /* Contenedor Superior Izquierdo para botones */
+      
         .top-left-controls {
           position: absolute; top: 20px; left: 20px; z-index: 100;
           display: flex; align-items: center; gap: 12px;
@@ -132,9 +145,7 @@ export default function YouTubeShortsViewer({ videos = DEFAULT_VIDEOS }: { video
 
         .fs-btn { width: 44px; height: 44px; font-size: 20px; }
         .mute-btn { padding: 0 20px; height: 44px; font-size: 13px; }
-
-        .control-btn:active { transform: scale(0.95); background: rgba(0,0,0,0.8); }
-      
+    
         .video-container {
           flex-shrink: 0; width: 100%; height: 100svh;
           scroll-snap-align: start; scroll-snap-stop: always;
@@ -171,22 +182,29 @@ export default function YouTubeShortsViewer({ videos = DEFAULT_VIDEOS }: { video
 
         .avatar-box img { width: 100%; height: 100%; object-fit: cover; }
 
-        .big-icon { 
-          font-size: 34px; 
+        .big-icon {
+          font-size: 34px;
           filter: drop-shadow(0 2px 4px rgba(0,0,0,0.8));
           line-height: 1;
         }
 
         .video-info {
-          position: absolute; bottom: 40px; left: 15px;
+          position: absolute; bottom: 85px; left: 15px;
           color: white; pointer-events: none; text-shadow: 0 1px 4px rgba(0,0,0,0.8);
           max-width: 75%;
+          z-index: 20;
+        }
+
+        .ad-wrapper {
+          position: absolute; bottom: 10px; left: 50%;
+          transform: translateX(-50%); z-index: 30;
+          width: 320px; min-height: 50px;
+          pointer-events: auto;
         }
 
         .video-offscreen { content-visibility: hidden; }
       `}</style>
 
-      {/* NUEVA BARRA DE CONTROLES SUPERIOR IZQUIERDA */}
       <div className="top-left-controls">
         <button className="control-btn fs-btn" onClick={toggleFullscreen} title="Pantalla Completa">
           {isFullscreen ? "⧉" : "⛶"}
@@ -222,7 +240,7 @@ export default function YouTubeShortsViewer({ videos = DEFAULT_VIDEOS }: { video
                     style={{ width: "100%", height: "100%", border: "none" }}
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                   />
-                  
+                
                   <div className="tiktok-ui">
                     <div className="icons-column">
                       <div className="ui-item">
@@ -251,6 +269,11 @@ export default function YouTubeShortsViewer({ videos = DEFAULT_VIDEOS }: { video
                       <b style={{ fontSize: '17px' }}>{video.author}</b>
                       <p style={{ margin: '6px 0 0', fontSize: '15px', lineHeight: '1.4' }}>{video.title}</p>
                     </div>
+                  </div>
+
+                  {/* Publicidad inyectada dentro del render del video activo */}
+                  <div className="ad-wrapper">
+                     <AdBanner key={`ad-${video.id}`} dimentions={"320x50"}/>
                   </div>
                 </>
               ) : (

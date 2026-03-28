@@ -33,13 +33,13 @@ export default function AdBanner({ dimentions, delay = 0 }: { dimentions: typeof
   const banner = useRef<HTMLDivElement>(null)
 
 
-  useEffect(() => {
-    window.open(
-      'https://www.profitablecpmratenetwork.com/adaqbm7zpk?key=62a996503c2f09182a5463638337e3a9',
-      '_blank',
-      'noopener,noreferrer'
-    )
-  }, [])
+  // useEffect(() => {
+  //   window.open(
+  //     'https://www.profitablecpmratenetwork.com/adaqbm7zpk?key=62a996503c2f09182a5463638337e3a9',
+  //     '_blank',
+  //     'noopener,noreferrer'
+  //   )
+  // }, [])
   
   useEffect(() => {
    
