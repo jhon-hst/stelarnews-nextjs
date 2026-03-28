@@ -54,3 +54,7 @@ agregar la publicidad banner
 
 buscar videos
 agregar publicidad intercalada en los shorts
+
+
+autoreproducir chrome
+agregar metaetiquetas de SEO y la imagen

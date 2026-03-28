@@ -377,7 +377,7 @@ export default function YouTubeShortsViewer({ videos = DEFAULT_VIDEOS }: { video
                   </div>
 
                   <div className="ad-wrapper">
-                    <AdBanner key={`ad-${video.id}`} dimentions={"320x50"} />
+                    {/* <AdBanner key={`ad-${video.id}`} dimentions={"320x50"} /> */}
                   </div>
                 </>
               ) : (
