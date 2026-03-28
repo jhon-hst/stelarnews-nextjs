@@ -70,21 +70,30 @@ export default function YouTubeShortsViewer({ videos = DEFAULT_VIDEOS }: { video
     });
   }, [videos.length]);
 
+  // Handler de Scroll Original (El que funcionaba bien)
   useEffect(() => {
     const el = scrollRef.current;
     if (!el || !isMounted) return;
+
     const onScroll = () => {
       const h = el.clientHeight;
       if (h === 0) return;
       const idx = Math.round(el.scrollTop / h);
+    
       if (idx !== activeIndex) {
         sendCommand(activeIndex, "pauseVideo");
         setActiveIndex(idx);
+        
+        // Ejecución inmediata de play para el nuevo video
         sendCommand(idx, "playVideo");
-        if (!isMuted) { sendCommand(idx, "unMute"); sendCommand(idx, "setVolume", [100]); }
+        if (!isMuted) {
+          sendCommand(idx, "unMute");
+          sendCommand(idx, "setVolume", [100]);
+        }
         ensureVideosLoaded(idx);
       }
     };
+
     el.addEventListener("scroll", onScroll, { passive: true });
     return () => el.removeEventListener("scroll", onScroll);
   }, [activeIndex, isMounted, isMuted, sendCommand, ensureVideosLoaded]);
@@ -106,15 +115,11 @@ export default function YouTubeShortsViewer({ videos = DEFAULT_VIDEOS }: { video
           position: absolute; top: 20px; left: 20px; z-index: 100;
         }
 
-        .control-btn {
-          background: rgba(0, 0, 0, 0.5); color: white; border: 1px solid rgba(255,255,255,0.2);
-          border-radius: 30px; cursor: pointer; font-weight: bold;
-          backdrop-filter: blur(8px); transition: all 0.2s ease;
-          display: flex; align-items: center; justify-content: center;
-          padding: 0 20px; height: 44px; font-size: 13px;
+        .mute-btn {
+          background: rgba(0, 0, 0, 0.6); color: white; border: 1px solid rgba(255,255,255,0.2);
+          padding: 10px 20px; border-radius: 30px; cursor: pointer;
+          font-weight: bold; backdrop-filter: blur(8px);
         }
-
-        .control-btn:active { transform: scale(0.95); background: rgba(0,0,0,0.8); }
     
         .video-container {
           flex-shrink: 0; width: 100%; height: 100svh;
@@ -168,7 +173,7 @@ export default function YouTubeShortsViewer({ videos = DEFAULT_VIDEOS }: { video
         .ad-wrapper {
           position: absolute; bottom: 10px; left: 50%;
           transform: translateX(-50%); z-index: 30;
-          width: 320px; min-height: 50px;
+          width: 320px; height: 50px;
           pointer-events: auto;
         }
 
@@ -177,7 +182,7 @@ export default function YouTubeShortsViewer({ videos = DEFAULT_VIDEOS }: { video
 
       <div className="top-left-controls">
         {isMuted && (
-          <button className="control-btn" onClick={unmuteAll}>
+          <button className="mute-btn" onClick={unmuteAll}>
             🔊 Activar Sonido
           </button>
         )}
@@ -214,20 +219,17 @@ export default function YouTubeShortsViewer({ videos = DEFAULT_VIDEOS }: { video
                           <img src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${video.author}`} alt="p" />
                         </div>
                       </div>
-
                       <div className="ui-item">
                         <span className="big-icon">🤍</span>
-                        <b style={{marginTop: '2px'}}>{video.likes}</b>
+                        <b>{video.likes}</b>
                       </div>
-
                       <div className="ui-item">
                         <span className="big-icon">💬</span>
-                        <b style={{marginTop: '2px'}}>{video.comments}</b>
+                        <b>{video.comments}</b>
                       </div>
-
                       <div className="ui-item">
                         <span className="big-icon" style={{fontSize: '30px'}}>🚀</span>
-                        <b style={{marginTop: '2px'}}>Share</b>
+                        <b>Share</b>
                       </div>
                     </div>
 
@@ -237,8 +239,9 @@ export default function YouTubeShortsViewer({ videos = DEFAULT_VIDEOS }: { video
                     </div>
                   </div>
 
+                  {/* Publicidad: Usamos video.id para que sea único por video, pero constante */}
                   <div className="ad-wrapper">
-                    <AdBanner key={`ad-${video.id}`} dimentions={"320x50"}/>
+                    <AdBanner key={video.id} dimentions={"320x50"}/>
                   </div>
                 </>
               ) : (
