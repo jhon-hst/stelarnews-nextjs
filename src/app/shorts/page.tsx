@@ -28,19 +28,10 @@ export default function YouTubeShortsViewer({ videos = DEFAULT_VIDEOS }: { video
   const [isMuted, setIsMuted] = useState(true);
   const [isMounted, setIsMounted] = useState(false);
   const [loadedVideos, setLoadedVideos] = useState<Set<number>>(new Set([0]));
-  const [isFullscreen, setIsFullscreen] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
-  const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setIsMounted(true);
-    const handleFsChange = () => setIsFullscreen(!!document.fullscreenElement);
-    document.addEventListener("fullscreenchange", handleFsChange);
-    document.addEventListener("webkitfullscreenchange", handleFsChange); // Safari/iOS
-    return () => {
-      document.removeEventListener("fullscreenchange", handleFsChange);
-      document.removeEventListener("webkitfullscreenchange", handleFsChange);
-    };
   }, []);
 
   const sendCommand = useCallback((index: number, command: string, args: unknown[] = []) => {
@@ -104,36 +95,15 @@ export default function YouTubeShortsViewer({ videos = DEFAULT_VIDEOS }: { video
     return () => clearTimeout(timer);
   }, [isMounted, ensureVideosLoaded]);
 
-  // Arreglo para Fullscreen Mobile
-  const toggleFullscreen = () => {
-    const docElm = containerRef.current as any;
-    if (!document.fullscreenElement && !(document as any).webkitFullscreenElement) {
-      if (docElm.requestFullscreen) {
-        docElm.requestFullscreen();
-      } else if (docElm.webkitRequestFullscreen) {
-        docElm.webkitRequestFullscreen();
-      } else if (docElm.msRequestFullscreen) {
-        docElm.msRequestFullscreen();
-      }
-    } else {
-      if (document.exitFullscreen) {
-        document.exitFullscreen();
-      } else if ((document as any).webkitExitFullscreen) {
-        (document as any).webkitExitFullscreen();
-      }
-    }
-  };
-
   if (!isMounted) return <div style={{ background: "#000", height: "100svh" }} />;
 
   return (
-    <div ref={containerRef} style={{ position: "relative", width: "100%", height: "100svh", background: "#000", overflow: "hidden" }}>
+    <div style={{ position: "relative", width: "100%", height: "100svh", background: "#000", overflow: "hidden" }}>
       <style>{`
         .yt-scroll::-webkit-scrollbar { display: none; }
       
         .top-left-controls {
           position: absolute; top: 20px; left: 20px; z-index: 100;
-          display: flex; align-items: center; gap: 12px;
         }
 
         .control-btn {
@@ -141,10 +111,10 @@ export default function YouTubeShortsViewer({ videos = DEFAULT_VIDEOS }: { video
           border-radius: 30px; cursor: pointer; font-weight: bold;
           backdrop-filter: blur(8px); transition: all 0.2s ease;
           display: flex; align-items: center; justify-content: center;
+          padding: 0 20px; height: 44px; font-size: 13px;
         }
 
-        .fs-btn { width: 44px; height: 44px; font-size: 20px; }
-        .mute-btn { padding: 0 20px; height: 44px; font-size: 13px; }
+        .control-btn:active { transform: scale(0.95); background: rgba(0,0,0,0.8); }
     
         .video-container {
           flex-shrink: 0; width: 100%; height: 100svh;
@@ -206,12 +176,8 @@ export default function YouTubeShortsViewer({ videos = DEFAULT_VIDEOS }: { video
       `}</style>
 
       <div className="top-left-controls">
-        <button className="control-btn fs-btn" onClick={toggleFullscreen} title="Pantalla Completa">
-          {isFullscreen ? "⧉" : "⛶"}
-        </button>
-
         {isMuted && (
-          <button className="control-btn mute-btn" onClick={unmuteAll}>
+          <button className="control-btn" onClick={unmuteAll}>
             🔊 Activar Sonido
           </button>
         )}
@@ -271,9 +237,8 @@ export default function YouTubeShortsViewer({ videos = DEFAULT_VIDEOS }: { video
                     </div>
                   </div>
 
-                  {/* Publicidad inyectada dentro del render del video activo */}
                   <div className="ad-wrapper">
-                     <AdBanner key={`ad-${video.id}`} dimentions={"320x50"}/>
+                    <AdBanner key={`ad-${video.id}`} dimentions={"320x50"}/>
                   </div>
                 </>
               ) : (
