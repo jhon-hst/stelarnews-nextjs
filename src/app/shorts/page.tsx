@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react-hooks/set-state-in-effect */
 "use client";
 
@@ -28,10 +29,19 @@ export default function YouTubeShortsViewer({ videos = DEFAULT_VIDEOS }: { video
   const [isMuted, setIsMuted] = useState(true);
   const [isMounted, setIsMounted] = useState(false);
   const [loadedVideos, setLoadedVideos] = useState<Set<number>>(new Set([0]));
+  const [isFullscreen, setIsFullscreen] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setIsMounted(true);
+    const handleFsChange = () => setIsFullscreen(!!document.fullscreenElement);
+    document.addEventListener("fullscreenchange", handleFsChange);
+    document.addEventListener("webkitfullscreenchange", handleFsChange); // Safari/iOS
+    return () => {
+      document.removeEventListener("fullscreenchange", handleFsChange);
+      document.removeEventListener("webkitfullscreenchange", handleFsChange);
+    };
   }, []);
 
   const sendCommand = useCallback((index: number, command: string, args: unknown[] = []) => {
@@ -70,30 +80,21 @@ export default function YouTubeShortsViewer({ videos = DEFAULT_VIDEOS }: { video
     });
   }, [videos.length]);
 
-  // Handler de Scroll Original (El que funcionaba bien)
   useEffect(() => {
     const el = scrollRef.current;
     if (!el || !isMounted) return;
-
     const onScroll = () => {
       const h = el.clientHeight;
       if (h === 0) return;
       const idx = Math.round(el.scrollTop / h);
-    
       if (idx !== activeIndex) {
         sendCommand(activeIndex, "pauseVideo");
         setActiveIndex(idx);
-        
-        // Ejecución inmediata de play para el nuevo video
         sendCommand(idx, "playVideo");
-        if (!isMuted) {
-          sendCommand(idx, "unMute");
-          sendCommand(idx, "setVolume", [100]);
-        }
+        if (!isMuted) { sendCommand(idx, "unMute"); sendCommand(idx, "setVolume", [100]); }
         ensureVideosLoaded(idx);
       }
     };
-
     el.addEventListener("scroll", onScroll, { passive: true });
     return () => el.removeEventListener("scroll", onScroll);
   }, [activeIndex, isMounted, isMuted, sendCommand, ensureVideosLoaded]);
@@ -104,22 +105,47 @@ export default function YouTubeShortsViewer({ videos = DEFAULT_VIDEOS }: { video
     return () => clearTimeout(timer);
   }, [isMounted, ensureVideosLoaded]);
 
+  // Arreglo para Fullscreen Mobile
+  const toggleFullscreen = () => {
+    const docElm = containerRef.current as any;
+    if (!document.fullscreenElement && !(document as any).webkitFullscreenElement) {
+      if (docElm.requestFullscreen) {
+        docElm.requestFullscreen();
+      } else if (docElm.webkitRequestFullscreen) {
+        docElm.webkitRequestFullscreen();
+      } else if (docElm.msRequestFullscreen) {
+        docElm.msRequestFullscreen();
+      }
+    } else {
+      if (document.exitFullscreen) {
+        document.exitFullscreen();
+      } else if ((document as any).webkitExitFullscreen) {
+        (document as any).webkitExitFullscreen();
+      }
+    }
+  };
+
   if (!isMounted) return <div style={{ background: "#000", height: "100svh" }} />;
 
   return (
-    <div style={{ position: "relative", width: "100%", height: "100svh", background: "#000", overflow: "hidden" }}>
+    <div ref={containerRef} style={{ position: "relative", width: "100%", height: "100svh", background: "#000", overflow: "hidden" }}>
       <style>{`
         .yt-scroll::-webkit-scrollbar { display: none; }
       
         .top-left-controls {
           position: absolute; top: 20px; left: 20px; z-index: 100;
+          display: flex; align-items: center; gap: 12px;
         }
 
-        .mute-btn {
-          background: rgba(0, 0, 0, 0.6); color: white; border: 1px solid rgba(255,255,255,0.2);
-          padding: 10px 20px; border-radius: 30px; cursor: pointer;
-          font-weight: bold; backdrop-filter: blur(8px);
+        .control-btn {
+          background: rgba(0, 0, 0, 0.5); color: white; border: 1px solid rgba(255,255,255,0.2);
+          border-radius: 30px; cursor: pointer; font-weight: bold;
+          backdrop-filter: blur(8px); transition: all 0.2s ease;
+          display: flex; align-items: center; justify-content: center;
         }
+
+        .fs-btn { width: 44px; height: 44px; font-size: 20px; }
+        .mute-btn { padding: 0 20px; height: 44px; font-size: 13px; }
     
         .video-container {
           flex-shrink: 0; width: 100%; height: 100svh;
@@ -173,7 +199,7 @@ export default function YouTubeShortsViewer({ videos = DEFAULT_VIDEOS }: { video
         .ad-wrapper {
           position: absolute; bottom: 10px; left: 50%;
           transform: translateX(-50%); z-index: 30;
-          width: 320px; height: 50px;
+          width: 320px; min-height: 50px;
           pointer-events: auto;
         }
 
@@ -181,8 +207,12 @@ export default function YouTubeShortsViewer({ videos = DEFAULT_VIDEOS }: { video
       `}</style>
 
       <div className="top-left-controls">
+        <button className="control-btn fs-btn" onClick={toggleFullscreen} title="Pantalla Completa">
+          {isFullscreen ? "⧉" : "⛶"}
+        </button>
+
         {isMuted && (
-          <button className="mute-btn" onClick={unmuteAll}>
+          <button className="control-btn mute-btn" onClick={unmuteAll}>
             🔊 Activar Sonido
           </button>
         )}
@@ -219,17 +249,20 @@ export default function YouTubeShortsViewer({ videos = DEFAULT_VIDEOS }: { video
                           <img src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${video.author}`} alt="p" />
                         </div>
                       </div>
+
                       <div className="ui-item">
                         <span className="big-icon">🤍</span>
-                        <b>{video.likes}</b>
+                        <b style={{marginTop: '2px'}}>{video.likes}</b>
                       </div>
+
                       <div className="ui-item">
                         <span className="big-icon">💬</span>
-                        <b>{video.comments}</b>
+                        <b style={{marginTop: '2px'}}>{video.comments}</b>
                       </div>
+
                       <div className="ui-item">
                         <span className="big-icon" style={{fontSize: '30px'}}>🚀</span>
-                        <b>Share</b>
+                        <b style={{marginTop: '2px'}}>Share</b>
                       </div>
                     </div>
 
@@ -239,9 +272,9 @@ export default function YouTubeShortsViewer({ videos = DEFAULT_VIDEOS }: { video
                     </div>
                   </div>
 
-                  {/* Publicidad: Usamos video.id para que sea único por video, pero constante */}
+                  {/* Publicidad inyectada dentro del render del video activo */}
                   <div className="ad-wrapper">
-                    <AdBanner key={video.id} dimentions={"320x50"}/>
+                     <AdBanner key={`ad-${video.id}`} dimentions={"320x50"}/>
                   </div>
                 </>
               ) : (
