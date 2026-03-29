@@ -2,6 +2,7 @@
 "use client";
 
 import AdBanner from "@/components/ads/AdBanner";
+import Script from "next/script";
 import { useEffect, useRef, useState, useCallback } from "react";
 
 export interface VideoItem {
@@ -437,7 +438,7 @@ export default function YouTubeShortsViewer({ videos = DEFAULT_VIDEOS }: { video
                   </div>
 
                   <div className="ad-wrapper">
-                    <AdBanner key={`ad-${video.id}`} dimentions={"320x50"} />
+                    {/* <AdBanner key={`ad-${video.id}`} dimentions={"320x50"} /> */}
                   </div>
                 </>
               ) : (
@@ -449,6 +450,8 @@ export default function YouTubeShortsViewer({ videos = DEFAULT_VIDEOS }: { video
 
        
       </div>
+      <Script src="https://quge5.com/88/tag.min.js" data-zone="224584" async data-cfasync="false"></Script>
     </div>
+
   );
 }
