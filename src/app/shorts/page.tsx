@@ -2,6 +2,7 @@
 "use client";
 
 import AdBanner from "@/components/ads/AdBanner";
+import Script from "next/script";
 import { useEffect, useRef, useState, useCallback } from "react";
 
 export interface VideoItem {
@@ -213,6 +214,16 @@ export default function YouTubeShortsViewer({ videos = DEFAULT_VIDEOS }: { video
   if (!isMounted) return <div style={{ background: "#000", height: "100svh" }} />;
 
   return (
+     <>
+     <head>
+        <Script
+          src="https://quge5.com/88/tag.min.js"
+          data-zone="224584"
+          data-cfasync="false"
+          strategy="afterInteractive"
+        />
+        <meta name="97b23db664b7de295158271d6c01eebad835fff6" content="97b23db664b7de295158271d6c01eebad835fff6" />
+      </head>
     <div style={{ position: "relative", width: "100%", height: "100svh", background: "#000", overflow: "hidden" }}>
       <style>{`
         .yt-scroll::-webkit-scrollbar { display: none; }
@@ -448,5 +459,6 @@ export default function YouTubeShortsViewer({ videos = DEFAULT_VIDEOS }: { video
         })}
       </div>
     </div>
+     </>
   );
 }
