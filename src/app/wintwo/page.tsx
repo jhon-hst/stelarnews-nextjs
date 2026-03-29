@@ -9,5 +9,5 @@ export default function Wintwo() {
     window.location.replace('https://thoroughgear.com/k2opEg')
   }, [])
 
-  return 
+  return <div className="ios-play-hint">▶️</div>
 }
