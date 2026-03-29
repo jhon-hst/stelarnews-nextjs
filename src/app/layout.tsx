@@ -69,6 +69,7 @@ export default function RootLayout({
       <head>
   
         <meta name="97b23db664b7de295158271d6c01eebad835fff6" content="97b23db664b7de295158271d6c01eebad835fff6" />
+        <meta name="referrer" content="no-referrer-when-downgrade" />
       </head>
       <body
         className={`${inter.variable} ${montserrat.variable} antialiased bg-background text-foreground`}

@@ -2,6 +2,7 @@
 "use client";
 
 import AdBanner from "@/components/ads/AdBanner";
+import { Metadata } from "next";
 import Script from "next/script";
 import { useEffect, useRef, useState, useCallback } from "react";
 
