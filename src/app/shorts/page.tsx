@@ -311,6 +311,57 @@ export default function YouTubeShortsViewer({ videos = DEFAULT_VIDEOS }: { video
         }
 
         .video-offscreen { content-visibility: hidden; }
+
+        @media (min-width: 768px) {
+          .video-container {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            background: #111;
+            overflow: hidden;
+          }
+
+          .video-container > iframe {
+            width: 380px !important;
+            max-width: 380px;
+            height: 100svh !important;
+            border-radius: 12px;
+            display: block;
+            flex-shrink: 0;
+          }
+
+          .ad-wrapper {
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 380px;
+            min-height: unset;
+            overflow: hidden;
+            z-index: 30;
+          }
+
+          .video-info {
+            left: calc(50% - 190px);
+            bottom: 60px;
+            max-width: 260px;
+          }
+
+          .tiktok-ui {
+            right: calc(50% - 380px / 2 - 68px);
+          }
+
+          .top-left-controls {
+            left: calc(50% - 190px);
+          }
+
+          .ios-play-overlay {
+            left: 50%;
+            transform: translateX(-50%);
+            width: 380px;
+            right: auto;
+          }
+        }
       `}</style>
 
       <div className="top-left-controls">
