@@ -13,14 +13,23 @@ export interface VideoItem {
   author: string;
 }
 
-const DEFAULT_VIDEOS: VideoItem[] = [
-  { id: "1", videoId: "KljXfBCU18w", title: "Cocinando en casa 🍳", likes: "12.5K", comments: "124", author: "@chef_master" },
-  { id: "2", videoId: "nS9etPTLFSM", title: "Increíble atardecer 🌅", likes: "8.2K", comments: "45", author: "@nature_vibe" },
-  { id: "3", videoId: "iJMjcBz1tIo", title: "Setup Gamer 2024 💻", likes: "45K", comments: "890", author: "@tech_reviews" },
-  { id: "4", videoId: "THFAF3VN9GQ", title: "Trucos de Next.js 🚀", likes: "3.1K", comments: "12", author: "@react_dev" },
-  { id: "5", videoId: "nCh8VmeYeWk", title: "Gatitos divertidos 🐱", likes: "105K", comments: "2.3K", author: "@cat_lover" },
-  { id: "6", videoId: "KljXfBCU18w", title: "Rutina de mañana ☀️", likes: "5.6K", comments: "34", author: "@fitness_life" },
-  { id: "7", videoId: "nS9etPTLFSM", title: "Viaje a Japón 🇯🇵", likes: "98K", comments: "1.1K", author: "@travel_pro" },
+const DEFAULT_VIDEOS = [
+  { id: "1", videoId: "ldSVhw1Nv50", title: "Real life transforming Cinderella dress! 👗😲", likes: "7.9M", comments: "289K", author: "@JustinFlom" },
+  { id: "2", videoId: "JfbnpYLe3Ms", title: "If Cleaning Was a Timed Sport. Part 2 🧹", likes: "6.1M", comments: "198K", author: "@DanielLaBelle" },
+  { id: "3", videoId: "Kq4O7W5EQ7Y", title: "🐞 Ladybug Squishy DIY with Nano Tape", likes: "5.8M", comments: "176K", author: "@JoyBamm" },
+  { id: "4", videoId: "ufvttxs9vEo", title: "Monica Toy - If you can't imitate, just stay home! 🎭", likes: "5.3M", comments: "154K", author: "@MonicaToy" },
+  { id: "5", videoId: "Nus7MfF2ytw", title: "Power Tools Racing Is INTENSE!! ⚡🏎️", likes: "5.1M", comments: "143K", author: "@HowRidiculous" },
+  { id: "6", videoId: "OE1mRsNz85k", title: "أول تجربة لي بالتصوير 📸", likes: "4.9M", comments: "131K", author: "@GK8VLOGS" },
+  { id: "7", videoId: "xLezgUBTFg4", title: "World's Best Prank Gone Wrong! 😱", likes: "4.4M", comments: "119K", author: "@CollinsKeyShorts" },
+  // 10 SHORTS VIRALES ADICIONALES - IDs verificados
+  { id: "11", videoId: "R1Ehb3JA-cM", title: "How Zach King Gets Away With Doing Graffiti 🎨✨", likes: "31M", comments: "420K", author: "@dollarbill" },
+  { id: "12", videoId: "4MjzAPYi2CM", title: "😱OMG😱 BEST TEACHER", likes: "35M", comments: "389K", author: "@dednahype" },
+  { id: "13", videoId: "QV6iOzP_OXY", title: "EATING SPONGE PRANK ON GIRLFRIEND 🧽😂 #Shorts", likes: "4.1M", comments: "95K", author: "@TopperGuild" },
+  { id: "14", videoId: "CxYkQzP8sew", title: "Turning Statues Into Food!! (Delicious) 🍫", likes: "3.9M", comments: "88K", author: "@BrandonB" },
+  { id: "15", videoId: "xXzanRLIb_c", title: "HAND IN BUCKET PRANK!! 🤣 #Shorts", likes: "3.7M", comments: "81K", author: "@JuliusDein" },
+  { id: "18", videoId: "cm8x4uR1bck", title: "Impossible balance 🤯 #shorts", likes: "3.1M", comments: "67K", author: "@XavierMortimer" },
+  { id: "19", videoId: "hfPdEE4kpYM", title: "Monster goes to the nail salon 🧟‍♀️😂", likes: "2.9M", comments: "63K", author: "@Yoeslan" },
+  { id: "20", videoId: "mep818UaYz0", title: "FUNNY DIY FOOT SOAP 🧼🦶😂 #SHORTS", likes: "2.7M", comments: "58K", author: "@5MinuteCraftsFamily" },
 ];
 
 // YT player states
@@ -273,7 +282,7 @@ export default function YouTubeShortsViewer({ videos = DEFAULT_VIDEOS }: { video
         }
 
         .ad-wrapper {
-          position: absolute; bottom: 10px; left: 50%;
+          position: absolute; bottom: 0px; left: 50%;
           transform: translateX(-50%); z-index: 30;
           width: 320px; min-height: 50px;
           pointer-events: auto;
@@ -386,6 +395,8 @@ export default function YouTubeShortsViewer({ videos = DEFAULT_VIDEOS }: { video
             </div>
           );
         })}
+
+       
       </div>
     </div>
   );
