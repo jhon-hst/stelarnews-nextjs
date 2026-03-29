@@ -5,6 +5,7 @@ import { GoogleAnalytics } from "@next/third-parties/google";
 import "./globals.css";
 import { Footer } from "@/components/footer/Footer";
 import { Header } from "@/components/header/Header";
+import Script from "next/script";
 // import Script from "next/script";
 
 const inter = Inter({
@@ -65,6 +66,14 @@ export default function RootLayout({
         src="https://pl28932105.effectivegatecpm.com/49/46/1c/49461c807d175833b911239087bf2701.js"
         strategy="afterInteractive"
       /> */}
+      <head>
+        <Script
+          src="https://quge5.com/88/tag.min.js"
+          data-zone="224584"
+          data-cfasync="false"
+          strategy="afterInteractive"
+        />
+      </head>
       <body
         className={`${inter.variable} ${montserrat.variable} antialiased bg-background text-foreground`}
       >
