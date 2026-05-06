@@ -58,3 +58,40 @@ agregar publicidad intercalada en los shorts
 
 autoreproducir chrome
 agregar metaetiquetas de SEO y la imagen
+
+
+
+
+- - - - - - - - - 
+
+descargar las imagenes, cada imagen con un numero 
+crear la tabla en supabase
+    - nombre
+    - id
+    - page
+       
+  {
+    "prologue": "1-44",
+    "1": "45-85",
+    "2": "86-144",
+    "3": "145-198"
+  }
+
+
+subir las imagenes a cloudflare
+    - carpeta id de la db
+        cada imagen tiene como nombre el numero de la imagen
+
+conectar la pagina con la db
+estilos
+publicar
+revisar
+comprar la suscripcion
+descargar el resto de imagenes
+subir el resto de imagenes
+agregar en la db
+meterle la publicidad 
+hacer publicidad en facebook
+
+
+Dezliza hacia arraiba para leer

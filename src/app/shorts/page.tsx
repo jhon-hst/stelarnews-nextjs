@@ -217,13 +217,6 @@ export default function YouTubeShortsViewer({ videos = DEFAULT_VIDEOS }: { video
   return (
      <>
      <head>
-        <Script
-          src="https://quge5.com/88/tag.min.js"
-          data-zone="224584"
-          data-cfasync="false"
-          strategy="afterInteractive"
-        />
-        <meta name="97b23db664b7de295158271d6c01eebad835fff6" content="97b23db664b7de295158271d6c01eebad835fff6" />
       </head>
     <div style={{ position: "relative", width: "100%", height: "100svh", background: "#000", overflow: "hidden" }}>
       <style>{`

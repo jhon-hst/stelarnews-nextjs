@@ -9,6 +9,11 @@ const nextConfig: NextConfig = {
         hostname: 'pub-c38d6e22cb9247ea8a87cbcb25f85c9a.r2.dev',
         pathname: '/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'pic.honeytoon.com',
+        pathname: '/**',
+      },
     ]
   }
 };

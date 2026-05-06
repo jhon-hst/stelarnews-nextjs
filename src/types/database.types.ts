@@ -73,6 +73,27 @@ export type Database = {
         }
         Relationships: []
       }
+      histories: {
+        Row: {
+          created_at: string
+          id: number
+          name: string | null
+          pages: Json | null
+        }
+        Insert: {
+          created_at?: string
+          id?: number
+          name?: string | null
+          pages?: Json | null
+        }
+        Update: {
+          created_at?: string
+          id?: number
+          name?: string | null
+          pages?: Json | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
