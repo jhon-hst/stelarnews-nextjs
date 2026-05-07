@@ -4,6 +4,10 @@ import { createClient } from "@/lib/supabase-client";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
+import AdNative from "@/components/ads/AdNative";
+import NextEpisodeButton from "@/components/history/NextEpisodeButton";
+import AdBanner from "@/components/ads/AdBanner";
+import SwipeIndicator from "@/components/history/SwipeIndicator";
 
 // ✅ CLAVE: Fuerza renderizado completamente estático
 // Cada página se genera UNA SOLA VEZ en build time → 0 invocaciones serverless por visita
@@ -154,9 +158,12 @@ export default async function HistoryPage({ params }: HistoryPageProps) {
   }
 
 
+
   return (
     <div className="mx-auto">
-     
+      {isNumericPage && <AdBanner dimentions="320x50"/>}
+
+     {!isNumericPage && <SwipeIndicator />}
       {imageArray.map((num) => (
         <Image 
           key={num} 
@@ -170,32 +177,18 @@ export default async function HistoryPage({ params }: HistoryPageProps) {
       ))}
 
 
- {nextPageKey && (
-  <div className="w-full flex justify-center px-5 my-8">
-    <div className="w-full max-w-6xl">
-      <Link
-        href={`/history/${history.name}/${id}/${nextPageKey}`}
-        className="
-          w-full flex items-center justify-center gap-4
-          border-4 border-black
-          bg-white text-black
-          rounded-2xl
-          py-6
-          text-xl sm:text-2xl
-          font-extrabold
-          transition
-          hover:bg-gray-100
-        "
-      >
-        <span>Leer Episodio {nextPageKey}</span>
+     {nextPageKey && (
+        <div className="w-full flex justify-center px-5 my-8">
+          <div className="w-full max-w-6xl">
+            <NextEpisodeButton
+              url={`/history/${history.name}/${id}/${nextPageKey}`}
+              nextPageKey={nextPageKey}
+            />
+          </div>
+        </div>
+      )}
 
-        <span className="flex items-center justify-center bg-yellow-400 rounded-full p-3">
-          <ArrowRight className="w-6 h-6 text-black" />
-        </span>
-      </Link>
-    </div>
-  </div>
-)}
+      <AdNative/>
     </div>
   );
 }
