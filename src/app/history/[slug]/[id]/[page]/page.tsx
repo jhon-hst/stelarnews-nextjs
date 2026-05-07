@@ -161,7 +161,7 @@ export default async function HistoryPage({ params }: HistoryPageProps) {
 
   return (
     <div className="mx-auto">
-      {isNumericPage && <AdBanner dimentions="320x50"/>}
+      {/* {isNumericPage && <AdBanner dimentions="320x50"/>} */}
 
      {!isNumericPage && <SwipeIndicator />}
       {imageArray.map((num) => (
@@ -188,7 +188,7 @@ export default async function HistoryPage({ params }: HistoryPageProps) {
         </div>
       )}
 
-      <AdNative/>
+      {/* <AdNative/> */}
     </div>
   );
 }

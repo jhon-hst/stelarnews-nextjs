@@ -6,6 +6,7 @@ import "./globals.css";
 import { Footer } from "@/components/footer/Footer";
 import { Header } from "@/components/header/Header";
 import Script from "next/script";
+import { MetaPixel } from "@/components/analytics/MetaPixel";
 // import Script from "next/script";
 
 const inter = Inter({
@@ -70,6 +71,7 @@ export default function RootLayout({
   
         <meta name="97b23db664b7de295158271d6c01eebad835fff6" content="97b23db664b7de295158271d6c01eebad835fff6" />
         <meta name="referrer" content="no-referrer-when-downgrade" />
+        <MetaPixel/>
       </head>
       <body
         className={`${inter.variable} ${montserrat.variable} antialiased bg-background text-foreground`}
@@ -85,6 +87,7 @@ export default function RootLayout({
         {/* <Script src="https://pl28938789.effectivegatecpm.com/01/ef/ba/01efbaba958df57a0bb6247886e34ac3.js"   strategy="afterInteractive"/> */}
       </body>
       <GoogleAnalytics gaId={gaId} />
+
     </html>
   );
 }
