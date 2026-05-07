@@ -15,10 +15,18 @@ export default function NextEpisodeButton({
   return (
     <button
       onClick={() => {
+        if (typeof window !== 'undefined' && (window).fbq) {
+          (window).fbq('trackCustom', 'EpisodioLeido', {
+            episodio: nextPageKey,
+            historia: 'ensename'
+          })
+        }
+
         const newTab = window.open(url, "_blank");
 
         newTab?.focus();
 
+   
         // window.location.href = "https://www.profitablecpmratenetwork.com/adaqbm7zpk?key=62a996503c2f09182a5463638337e3a9";
       }}
       className="
