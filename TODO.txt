@@ -78,20 +78,12 @@ crear la tabla en supabase
   }
 
 
-subir las imagenes a cloudflare
-    - carpeta id de la db
-        cada imagen tiene como nombre el numero de la imagen
-
-conectar la pagina con la db
-estilos
-publicar
-revisar
-comprar la suscripcion
-descargar el resto de imagenes
-subir el resto de imagenes
-agregar en la db
-meterle la publicidad 
-hacer publicidad en facebook
 
 
-Desliza hacia arriba para leer
+cambiar las imagenes por las sin sensura
+
+agregar un loading mientras las imagenes cargan 
+
+activar la publicidad en la pagina antes de publicar el anuncio
+
+publicar el anuncio

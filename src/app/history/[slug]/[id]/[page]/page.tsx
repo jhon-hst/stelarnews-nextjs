@@ -2,8 +2,6 @@ import type { Metadata } from "next";
 import { Tables } from "@/types/database.types";
 import { createClient } from "@/lib/supabase-client";
 import Image from "next/image";
-import Link from "next/link";
-import { ArrowRight } from "lucide-react";
 import AdNative from "@/components/ads/AdNative";
 import NextEpisodeButton from "@/components/history/NextEpisodeButton";
 import AdBanner from "@/components/ads/AdBanner";
@@ -161,7 +159,7 @@ export default async function HistoryPage({ params }: HistoryPageProps) {
 
   return (
     <div className="mx-auto">
-      {/* {isNumericPage && <AdBanner dimentions="320x50"/>} */}
+      {isNumericPage && <AdBanner dimentions="320x50"/>}
 
      {!isNumericPage && <SwipeIndicator />}
       {imageArray.map((num) => (
@@ -188,7 +186,7 @@ export default async function HistoryPage({ params }: HistoryPageProps) {
         </div>
       )}
 
-      {/* <AdNative/> */}
+      <AdNative/>
     </div>
   );
 }

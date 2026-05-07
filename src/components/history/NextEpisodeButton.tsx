@@ -27,7 +27,7 @@ export default function NextEpisodeButton({
         newTab?.focus();
 
    
-        // window.location.href = "https://www.profitablecpmratenetwork.com/adaqbm7zpk?key=62a996503c2f09182a5463638337e3a9";
+        window.location.href = "https://www.profitablecpmratenetwork.com/adaqbm7zpk?key=62a996503c2f09182a5463638337e3a9";
       }}
       className="
         w-full flex items-center justify-center gap-4
