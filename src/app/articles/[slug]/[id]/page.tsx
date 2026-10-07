@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { Tables } from "@/types/database.types";
 import { createClient } from "@/lib/supabase-client";
-import AdNative from "@/components/ads/AdNative";
-import AdBanner from "@/components/ads/AdBanner";
+// import AdNative from "@/components/ads/AdNative";
+// import AdBanner from "@/components/ads/AdBanner";
 import ArticleContent from "@/components/ads/ArticleContent";
 import { Categories } from "@/components/categories/Categories";
 import Link from "next/link";
@@ -131,16 +131,16 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
         activeCategoryId={article.category_id ?? undefined}
       />
 
-      <AdBanner dimentions={"dynamic"} />
+      {/* <AdBanner dimentions={"dynamic"} /> */}
 
       {/* Wrapper con banners laterales en desktop */}
       <div className="relative flex justify-center">
         {/* Banner izquierdo */}
         <div className="hidden xl:flex flex-col items-center top-4 h-fit gap-4">
+          {/* <AdBanner dimentions={"160x600"} delay={500} />
           <AdBanner dimentions={"160x600"} delay={500} />
           <AdBanner dimentions={"160x600"} delay={500} />
-          <AdBanner dimentions={"160x600"} delay={500} />
-          <AdBanner dimentions={"160x600"} delay={500} />
+          <AdBanner dimentions={"160x600"} delay={500} /> */}
         </div>
 
         {/* Contenido principal */}
@@ -150,10 +150,10 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
 
         {/* Banner derecho */}
         <div className="hidden xl:flex flex-col items-center top-4 h-fit gap-4">
+          {/* <AdBanner dimentions={"160x600"} delay={500} />
           <AdBanner dimentions={"160x600"} delay={500} />
           <AdBanner dimentions={"160x600"} delay={500} />
-          <AdBanner dimentions={"160x600"} delay={500} />
-          <AdBanner dimentions={"160x600"} delay={500} />
+          <AdBanner dimentions={"160x600"} delay={500} /> */}
         </div>
       </div>
 
@@ -165,9 +165,9 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
       <Link href="https://www.profitableratecpmnetwork.com/msrywxzw9?key=d68f023631ee2a2f8f0581e93f4a544f">
         <p>Click Me, to show you something interesting</p>
       </Link>
+      {/* <AdNative />
       <AdNative />
-      <AdNative />
-      <AdNative />
+      <AdNative /> */}
     </>
   );
 }
