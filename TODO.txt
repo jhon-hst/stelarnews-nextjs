@@ -76,14 +76,3 @@ crear la tabla en supabase
     "2": "86-144",
     "3": "145-198"
   }
-
-
-
-
-cambiar las imagenes por las sin sensura
-
-agregar un loading mientras las imagenes cargan 
-
-activar la publicidad en la pagina antes de publicar el anuncio
-
-publicar el anuncio

@@ -7,6 +7,7 @@ import { Footer } from "@/components/footer/Footer";
 import { Header } from "@/components/header/Header";
 import Script from "next/script";
 import { MetaPixel } from "@/components/analytics/MetaPixel";
+import { FingerprintProvider } from '@fingerprint/react'
 // import Script from "next/script";
 
 const inter = Inter({
@@ -76,12 +77,14 @@ export default function RootLayout({
       <body
         className={`${inter.variable} ${montserrat.variable} antialiased bg-background text-foreground`}
       >
-        <div className="flex min-h-screen flex-col bg-white text-[#1a1a1a]">
-          {/* <Header /> */}
-          {children}
-          {/* <Footer /> */}
-          
-        </div>
+        <FingerprintProvider apiKey="QfPtIwAmTHgcftLIkHrv">
+          <div className="flex min-h-screen flex-col bg-white text-[#1a1a1a]">
+            {/* <Header /> */}
+            {children}
+            {/* <Footer /> */}
+            
+          </div>
+        </FingerprintProvider>
 
         {/* Social bar ads, son push notification, super invasivos, no se si funciona nunca lo puede probar  */}
         {/* <Script src="https://pl28938789.effectivegatecpm.com/01/ef/ba/01efbaba958df57a0bb6247886e34ac3.js"   strategy="afterInteractive"/> */}

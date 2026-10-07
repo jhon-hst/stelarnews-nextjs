@@ -3,6 +3,7 @@ import { ItemArticle } from "@/components/article/Article";
 import { Categories } from "@/components/categories/Categories";
 import { createClient } from "@/lib/supabase-client";
 import { Tables } from "@/types/database.types";
+import { TestFingerPrint } from "@/components/testFingerPrint/TestFingerPrint";
 
 // ✅ Renderizado estático — se genera una sola vez en build time
 export const dynamic = "force-static";
@@ -87,6 +88,7 @@ export default async function Home() {
             <ItemArticle key={article.id} article={article} />
           ))}
         </section>
+        <TestFingerPrint/>
       </main>
     </>
   );
