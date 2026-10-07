@@ -5,6 +5,7 @@ import AdNative from "@/components/ads/AdNative";
 import AdBanner from "@/components/ads/AdBanner";
 import ArticleContent from "@/components/ads/ArticleContent";
 import { Categories } from "@/components/categories/Categories";
+import Link from "next/link";
 
 // ✅ CLAVE: Fuerza renderizado completamente estático
 // Cada página se genera UNA SOLA VEZ en build time → 0 invocaciones serverless por visita
@@ -161,6 +162,9 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
           You may also be interested in
         </h2>
       </div>
+      <Link href="https://www.profitableratecpmnetwork.com/msrywxzw9?key=d68f023631ee2a2f8f0581e93f4a544f">
+        <p>Click Me, to show you something interesting</p>
+      </Link>
       <AdNative />
       <AdNative />
       <AdNative />
